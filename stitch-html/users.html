@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f2f4f6",
+                    "secondary": "#515f74",
+                    "on-primary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "secondary-container": "#d5e3fc",
+                    "on-primary-fixed": "#001453",
+                    "surface-container-highest": "#e0e3e5",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-tertiary-container": "#98805d",
+                    "on-background": "#191c1e",
+                    "surface": "#f7f9fb",
+                    "on-surface-variant": "#45464d",
+                    "on-primary-fixed-variant": "#173bab",
+                    "tertiary-fixed": "#fcdeb5",
+                    "on-secondary-fixed": "#0d1c2e",
+                    "surface-bright": "#f7f9fb",
+                    "surface-variant": "#e0e3e5",
+                    "tertiary": "#000000",
+                    "outline-variant": "#c6c6cd",
+                    "tertiary-container": "#271901",
+                    "on-primary-container": "#607cec",
+                    "outline": "#76777d",
+                    "primary-container": "#001453",
+                    "error-container": "#ffdad6",
+                    "on-surface": "#191c1e",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#574425",
+                    "on-secondary-container": "#57657a",
+                    "inverse-primary": "#b8c4ff",
+                    "primary-fixed": "#dde1ff",
+                    "background": "#f7f9fb",
+                    "inverse-surface": "#2d3133",
+                    "surface-dim": "#d8dadc",
+                    "on-tertiary-fixed": "#271901",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed-dim": "#dec29a",
+                    "surface-container": "#eceef0",
+                    "on-secondary-fixed-variant": "#3a485b",
+                    "primary-fixed-dim": "#b8c4ff",
+                    "secondary-fixed": "#d5e3fc",
+                    "surface-tint": "#3755c3",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "surface-container-high": "#e6e8ea",
+                    "secondary-fixed-dim": "#b9c7df",
+                    "primary": "#000000",
+                    "on-tertiary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, .brand-font { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background flex h-screen overflow-hidden">
+<!-- SideNavBar (Shared Component) -->
+<aside class="flex flex-col h-full py-6 bg-slate-100 dark:bg-slate-900 h-screen w-64 border-r-0 shrink-0">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3 mb-1">
+<div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm">shield</span>
+</div>
+<span class="font-['Manrope'] text-xl font-bold text-slate-900 dark:text-white">Sentinel Access</span>
+</div>
+<p class="text-xs text-slate-500 font-medium px-1">Security Management</p>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 font-bold text-slate-900 dark:text-white relative after:content-[''] after:absolute after:left-0 after:w-1 after:h-4 after:bg-slate-950 dark:after:bg-white bg-slate-200 dark:bg-slate-800 rounded-lg" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span>Logs</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">group</span>
+<span>Users</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">location_on</span>
+<span>Sectors</span>
+</a>
+</nav>
+<div class="px-4 mt-auto space-y-1 border-t border-slate-200 dark:border-slate-800 pt-6">
+<button class="w-full mb-4 bg-error text-white py-2.5 rounded-lg text-sm font-bold shadow-lg shadow-error/20 active:scale-[0.98] transition-transform">
+            Emergency Lockdown
+        </button>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">help</span>
+<span>Support</span>
+</a>
+</div>
+</aside>
+<div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+<!-- TopNavBar (Shared Component) -->
+<header class="flex justify-between items-center px-8 w-full sticky top-0 z-40 bg-slate-50 dark:bg-slate-950 h-16 shrink-0">
+<div class="flex items-center gap-8 flex-1">
+<span class="font-['Manrope'] text-lg font-extrabold tracking-tight text-slate-900 dark:text-white">Security Monitor</span>
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="w-full bg-surface-container-highest/50 border-none rounded-full pl-10 pr-4 py-1.5 text-sm focus:ring-1 focus:ring-primary" placeholder="Global search..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-opacity relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full border-2 border-slate-50"></span>
+</button>
+<button class="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-opacity">
+<span class="material-symbols-outlined">history</span>
+</button>
+</div>
+<div class="h-6 w-px bg-slate-200"></div>
+<div class="flex items-center gap-3">
+<span class="text-sm font-medium text-slate-400">Help</span>
+<button class="px-4 py-1.5 bg-primary text-white text-sm font-semibold rounded-lg hover:opacity-90 active:opacity-80 transition-all">
+                    Grant Access
+                </button>
+<img alt="Administrator Profile" class="w-8 h-8 rounded-full border border-slate-200" data-alt="Close up portrait of a professional man in a business suit with a neutral confident expression, corporate headshot style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmSf8cy5XDDhLL0Xy1QmhgxdfiJYmelNqyYpE1UBxZZ4eIdbaNuIGeO8VB9Jx-d4IsyCKUifnU-WejSAhJT1_3OAknLu3q1WTuJzcpkm3G9zkKCuiNGZJk3YIp0UF0CsKvo5ovJEn4mjZcA7rf98Tdc-OXlV3Bc7KZs7atiACuZ2UuRsM59BzZ2VqbPdEu9PsOOhCrhN0MXXo1HzDCddz5u2QvmzYSFs1A0euAM7fYeYWVJ3Q6geeNrfebr3APeEk7038JvNd8NMI"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto p-8 space-y-8 bg-surface">
+<!-- Page Header -->
+<div class="flex justify-between items-end">
+<div>
+<h1 class="text-3xl font-bold tracking-tight text-on-surface">Registros de Acesso</h1>
+<p class="text-on-surface-variant mt-1">Monitoramento em tempo real de fluxos de entrada e saída.</p>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container-highest text-on-surface text-sm font-medium hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-lg">download</span>
+                    Exportar CSV
+                </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container-highest text-on-surface text-sm font-medium hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-lg">print</span>
+                    Imprimir
+                </button>
+</div>
+</div>
+<!-- Advanced Filter Bar (RF22) -->
+<section class="bg-surface-container-lowest rounded-xl p-5 shadow-sm space-y-4">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="space-y-1.5">
+<label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant px-1">Período</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">calendar_today</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2.5 text-sm font-medium focus:ring-1 focus:ring-primary-container" type="text" value="01 Jan, 2024 - 31 Jan, 2024"/>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant px-1">Buscar Usuário</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">person_search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2.5 text-sm font-medium focus:ring-1 focus:ring-primary-container" placeholder="Nome ou CPF..." type="text"/>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant px-1">Setor</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg px-4 py-2.5 text-sm font-medium focus:ring-1 focus:ring-primary-container appearance-none">
+<option>Todos os Setores</option>
+<option>Administrativo</option>
+<option>TI / Servidores</option>
+<option>Laboratório A</option>
+<option>Estoque</option>
+</select>
+</div>
+<div class="flex items-end pb-0.5">
+<button class="w-full bg-primary-container text-on-primary-container py-2.5 rounded-lg text-sm font-bold flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined text-lg">filter_alt</span>
+                        Aplicar Filtros
+                    </button>
+</div>
+</div>
+</section>
+<!-- Data Table Section -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low">
+<tr>
+<th class="px-8 py-5 text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">Usuário</th>
+<th class="px-8 py-5 text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">Setor</th>
+<th class="px-8 py-5 text-[11px] font-bold uppercase tracking-widest text-on-surface-variant text-center">Tipo</th>
+<th class="px-8 py-5 text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">Data</th>
+<th class="px-8 py-5 text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">Hora</th>
+<th class="px-8 py-5 text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">Dispositivo / ID</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold text-sm">
+                                        AR
+                                    </div>
+<div>
+<p class="text-sm font-bold text-on-surface">Alexandre Rocha</p>
+<p class="text-[11px] text-on-surface-variant font-medium">ID: 98231</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-sm text-on-surface-variant font-medium">TI / Servidores</td>
+<td class="px-8 py-6 text-center">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-[#E6F4EA] text-[#1E7E34] uppercase tracking-wider">
+                                    ENTRADA
+                                </span>
+</td>
+<td class="px-8 py-6 text-sm text-on-surface-variant font-medium">24/05/2024</td>
+<td class="px-8 py-6 text-sm font-medium text-on-surface">08:14:22</td>
+<td class="px-8 py-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-lg">nest_remote_comfort_sensor</span>
+<span class="text-sm font-bold text-on-surface">CAT-042-L</span>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed font-bold text-sm">
+                                        MS
+                                    </div>
+<div>
+<p class="text-sm font-bold text-on-surface">Mariana Silva</p>
+<p class="text-[11px] text-on-surface-variant font-medium">ID: 44210</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-sm text-on-surface-variant font-medium">Administrativo</td>
+<td class="px-8 py-6 text-center">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-[#FEEFEF] text-[#D93025] uppercase tracking-wider">
+                                    SAÍDA
+                                </span>
+</td>
+<td class="px-8 py-6 text-sm text-on-surface-variant font-medium">24/05/2024</td>
+<td class="px-8 py-6 text-sm font-medium text-on-surface">18:02:45</td>
+<td class="px-8 py-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-lg">door_front</span>
+<span class="text-sm font-bold text-on-surface">PORTAL-NORT</span>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-bold text-sm">
+                                        RL
+                                    </div>
+<div>
+<p class="text-sm font-bold text-on-surface">Roberto Lima</p>
+<p class="text-[11px] text-on-surface-variant font-medium">ID: 10293</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-sm text-on-surface-variant font-medium">Logística</td>
+<td class="px-8 py-6 text-center">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-[#E6F4EA] text-[#1E7E34] uppercase tracking-wider">
+                                    ENTRADA
+                                </span>
+</td>
+<td class="px-8 py-6 text-sm text-on-surface-variant font-medium">24/05/2024</td>
+<td class="px-8 py-6 text-sm font-medium text-on-surface">09:55:12</td>
+<td class="px-8 py-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-lg">nest_remote_comfort_sensor</span>
+<span class="text-sm font-bold text-on-surface">CAT-012-G</span>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<img alt="User" class="w-10 h-10 rounded-full object-cover" data-alt="Studio headshot portrait of a smiling young professional woman with dark hair and bright neutral studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAL-oJvmkE91NBY3K9Dxevwif56sNFgqIFXPnbkKdZzyZtVC9_bOclk3SnnsqwMAg_AyMbvw6xWSMzsp1xy8_ctpv3pnlbN8VtzIW1H_wFylXL2fzeyfHqG_eNiG1QW-bidMqXWsWxHYXzsskrs6plmhzUp-4ZfBrSF5ZkuRUbi4-yMsdp1_KAeyQ05j-JMv8OaZYPSERL3NEv_nER9zKBKyUoIOZVlAbYrIPkZAhCJ_H2pIZy2WHLcWDAbNo-cpUhtSXNxSXmQoHc"/>
+<div>
+<p class="text-sm font-bold text-on-surface">Ana Paula Gomes</p>
+<p class="text-[11px] text-on-surface-variant font-medium">ID: 88712</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-sm text-on-surface-variant font-medium">Laboratório A</td>
+<td class="px-8 py-6 text-center">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-[#FEEFEF] text-[#D93025] uppercase tracking-wider">
+                                    SAÍDA
+                                </span>
+</td>
+<td class="px-8 py-6 text-sm text-on-surface-variant font-medium">24/05/2024</td>
+<td class="px-8 py-6 text-sm font-medium text-on-surface">12:30:04</td>
+<td class="px-8 py-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-lg">lock</span>
+<span class="text-sm font-bold text-on-surface">MAG-BIO-01</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="flex items-center justify-between px-8 py-6 bg-surface-container-low border-t border-surface-container">
+<p class="text-xs font-medium text-on-surface-variant">Mostrando 1-10 de 1,240 registros</p>
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container transition-colors disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined text-lg leading-none">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-black text-white text-xs font-bold">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-surface-container-lowest text-on-surface text-xs font-bold hover:bg-surface-container transition-colors">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-surface-container-lowest text-on-surface text-xs font-bold hover:bg-surface-container transition-colors">3</button>
+<span class="w-8 h-8 flex items-center justify-center text-on-surface-variant text-xs">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-lg leading-none">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+</div>
+</body></html>

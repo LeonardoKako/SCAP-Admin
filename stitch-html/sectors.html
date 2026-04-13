@@ -1,0 +1,328 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f2f4f6",
+                        "secondary": "#515f74",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#d5e3fc",
+                        "on-primary-fixed": "#001453",
+                        "surface-container-highest": "#e0e3e5",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-tertiary-container": "#98805d",
+                        "on-background": "#191c1e",
+                        "surface": "#f7f9fb",
+                        "on-surface-variant": "#45464d",
+                        "on-primary-fixed-variant": "#173bab",
+                        "tertiary-fixed": "#fcdeb5",
+                        "on-secondary-fixed": "#0d1c2e",
+                        "surface-bright": "#f7f9fb",
+                        "surface-variant": "#e0e3e5",
+                        "tertiary": "#000000",
+                        "outline-variant": "#c6c6cd",
+                        "tertiary-container": "#271901",
+                        "on-primary-container": "#607cec",
+                        "outline": "#76777d",
+                        "primary-container": "#001453",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#191c1e",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#574425",
+                        "on-secondary-container": "#57657a",
+                        "inverse-primary": "#b8c4ff",
+                        "primary-fixed": "#dde1ff",
+                        "background": "#f7f9fb",
+                        "inverse-surface": "#2d3133",
+                        "surface-dim": "#d8dadc",
+                        "on-tertiary-fixed": "#271901",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#dec29a",
+                        "surface-container": "#eceef0",
+                        "on-secondary-fixed-variant": "#3a485b",
+                        "primary-fixed-dim": "#b8c4ff",
+                        "secondary-fixed": "#d5e3fc",
+                        "surface-tint": "#3755c3",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#e6e8ea",
+                        "secondary-fixed-dim": "#b9c7df",
+                        "primary": "#000000",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background flex h-screen overflow-hidden">
+<!-- SideNavBar Component -->
+<aside class="flex flex-col h-full py-6 bg-slate-100 dark:bg-slate-900 h-screen w-64 border-r-0 shrink-0">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3 mb-1">
+<div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" style="">shield</span>
+</div>
+<h1 class="font-['Manrope'] text-xl font-bold text-slate-900 dark:text-white" style="">Sentinel Access</h1>
+</div>
+<p class="text-xs text-slate-500 font-medium px-1" style="">Security Management</p>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors rounded-lg group" href="#" style="">
+<span class="material-symbols-outlined" style="">dashboard</span>
+<span class="" style="">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors rounded-lg group" href="#" style="">
+<span class="material-symbols-outlined" style="">list_alt</span>
+<span class="" style="">Logs</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors rounded-lg group" href="#" style="">
+<span class="material-symbols-outlined" style="">group</span>
+<span class="" style="">Users</span>
+</a>
+<!-- Active Tab: Sectors -->
+<a class="flex items-center gap-3 px-3 py-2 font-bold text-slate-900 dark:text-white relative after:content-[''] after:absolute after:left-0 after:w-1 after:h-4 after:bg-slate-950 dark:after:bg-white bg-slate-200 dark:bg-slate-800 rounded-lg" href="#" style="">
+<span class="material-symbols-outlined" style="">location_on</span>
+<span class="" style="">Sectors</span>
+</a>
+</nav>
+<div class="px-4 mt-auto space-y-1 border-t border-slate-200 dark:border-slate-800 pt-6">
+<button class="w-full mb-4 bg-error text-white py-2.5 rounded-lg text-sm font-bold shadow-lg shadow-error/20 active:scale-[0.98] transition-transform" style="">
+            Emergency Lockdown
+        </button>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors rounded-lg group" href="#" style="">
+<span class="material-symbols-outlined" style="">settings</span>
+<span class="" style="">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors rounded-lg group" href="#" style="">
+<span class="material-symbols-outlined" style="">help</span>
+<span class="" style="">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col min-w-0 bg-surface overflow-hidden">
+<!-- TopNavBar Component -->
+<header class="flex justify-between items-center px-8 w-full sticky top-0 z-40 bg-slate-50 dark:bg-slate-950 h-16 shrink-0">
+<div class="flex items-center gap-8 flex-1">
+<span class="font-['Manrope'] text-lg font-extrabold tracking-tight text-slate-900 dark:text-white" style="">Security Monitor</span>
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg" style="">search</span>
+<input class="w-full bg-surface-container-highest/50 border-none rounded-full pl-10 pr-4 py-1.5 text-sm focus:ring-1 focus:ring-primary" placeholder="gdfgd" type="text">
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-opacity relative" style="">
+<span class="material-symbols-outlined" style="">notifications</span>
+</button>
+<button class="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-opacity" style="">
+<span class="material-symbols-outlined" style="">history</span>
+</button>
+</div>
+<div class="h-6 w-px bg-slate-200"></div>
+<div class="flex items-center gap-3">
+<span class="text-sm font-medium text-slate-400" style="">Help</span>
+<button class="px-4 py-1.5 bg-primary text-white text-sm font-semibold rounded-lg hover:opacity-90 active:opacity-80 transition-all" style="">
+                    Grant Access
+                </button>
+<img alt="Administrator Profile" class="w-8 h-8 rounded-full border border-slate-200 object-cover" data-alt="close-up portrait of a professional security administrator in a modern office setting, soft professional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1Tpo1onNNVndfy0gltm-1_iAmF4h3PkFQCNEtqSFXcs0UC4nqre2MKgQ7mBx0qC3hXaXkmI2S2_Z06tY2NdZb3Wf_brLfxrHPnmr1Olxcmr-ZachUMpEmA2rPQoV5VmzumnMq4wdElNTCaPvEyNyT6VOhJgtnxD5a9Fzihmu3t08jus5bkbDZHmTWbSYs4IgXap8tdRokKtNuVledFuApMv7cdnKyqyEK_LfuCf0Gdn0AjoNqm58b9NPoflVgTBJ6bq-Zxu-j3so" style="">
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="flex-1 overflow-y-auto p-8">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-10">
+<div>
+<h2 class="font-headline text-[2rem] text-on-surface leading-none mb-2" style="">Gestão de Setores</h2>
+<p class="text-secondary font-medium" style="">Controle de perímetros e segmentação de acessos por zona.</p>
+</div>
+<button class="bg-[#001453] text-white px-6 py-3 rounded-lg font-bold flex items-center space-x-2 active:scale-95 transition-transform" style="">
+<span class="material-symbols-outlined" style="">add</span>
+<span class="" style="">Novo Setor</span>
+</button>
+</div>
+<!-- Bento Layout for Stats -->
+<div class="grid grid-cols-12 gap-6 mb-8">
+<div class="col-span-12 md:col-span-4 bg-white p-8 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-[#001453]"></div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3" style="">Setores Ativos</p>
+<h3 class="text-4xl font-headline font-bold text-slate-900 leading-none" style="">12</h3>
+<p class="text-xs text-slate-500 mt-4 font-medium flex items-center" style="">
+<span class="material-symbols-outlined text-[14px] mr-1" style="">trending_up</span>
+                    2 novos adicionados este mês
+                </p>
+</div>
+<div class="col-span-12 md:col-span-4 bg-white p-8 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-[#a68d6e]"></div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3" style="">Total de Usuários</p>
+<h3 class="text-4xl font-headline font-bold text-slate-900 leading-none" style="">1,248</h3>
+<p class="text-xs text-slate-500 mt-4 font-medium" style="">Distribuição em 100% da planta</p>
+</div>
+<div class="col-span-12 md:col-span-4 bg-white p-8 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-[#d32f2f]"></div>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3" style="">Zonas Restritas</p>
+<h3 class="text-4xl font-headline font-bold text-slate-900 leading-none" style="">04</h3>
+<p class="text-xs text-error mt-4 font-medium font-bold" style="">Acesso somente nível Admin</p>
+</div>
+</div>
+<!-- Main Sectors Table Container -->
+<div class="bg-slate-50 rounded-xl overflow-hidden border border-slate-100">
+<div class="overflow-x-auto">
+<table class="w-full border-collapse">
+<thead>
+<tr class="text-left">
+<th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.1em] text-slate-400" style="">Setor</th>
+<th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.1em] text-slate-400" style="">Descrição</th>
+<th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.1em] text-slate-400 text-center" style="">Usuários</th>
+<th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.1em] text-slate-400" style="">Criado Em</th>
+<th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.1em] text-slate-400 text-right" style="">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<!-- Row 1 -->
+<tr class="group hover:bg-white transition-colors bg-transparent">
+<td class="px-8 py-8" style="">
+<div class="flex items-center space-x-3">
+<div class="w-2 h-2 rounded-full bg-[#173bab]"></div>
+<span class="font-bold text-slate-900" style="">Data Center - A1</span>
+</div>
+</td>
+<td class="px-8 py-8 text-sm text-slate-500 max-w-xs truncate" style="">Servidores críticos e infraestrutura de rede central.</td>
+<td class="px-8 py-8 text-center" style="">
+<span class="inline-flex items-center px-4 py-1.5 rounded-full bg-[#dde1ff] text-[#001453] text-[11px] font-extrabold" style="">
+                                    42
+                                </span>
+</td>
+<td class="px-8 py-8 text-sm text-slate-500" style="">12 Jan, 2024</td>
+<td class="px-8 py-8 text-right" style="">
+<div class="flex justify-end space-x-4">
+<button class="text-slate-400 hover:text-slate-900 transition-colors" style="">
+<span class="material-symbols-outlined text-xl" style="">edit</span>
+</button>
+<button class="text-slate-400 hover:text-error transition-colors" style="">
+<span class="material-symbols-outlined text-xl" style="">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="group hover:bg-white transition-colors bg-transparent">
+<td class="px-8 py-8" style="">
+<div class="flex items-center space-x-3">
+<div class="w-2 h-2 rounded-full bg-[#98805d]"></div>
+<span class="font-bold text-slate-900" style="">Escritório Central</span>
+</div>
+</td>
+<td class="px-8 py-8 text-sm text-slate-500 max-w-xs truncate" style="">Área administrativa e estações de trabalho comuns.</td>
+<td class="px-8 py-8 text-center" style="">
+<span class="inline-flex items-center px-4 py-1.5 rounded-full bg-[#dde1ff] text-[#001453] text-[11px] font-extrabold" style="">
+                                    850
+                                </span>
+</td>
+<td class="px-8 py-8 text-sm text-slate-500" style="">05 Jan, 2024</td>
+<td class="px-8 py-8 text-right" style="">
+<div class="flex justify-end space-x-4">
+<button class="text-slate-400 hover:text-slate-900 transition-colors" style="">
+<span class="material-symbols-outlined text-xl" style="">edit</span>
+</button>
+<button class="text-slate-400 hover:text-error transition-colors" style="">
+<span class="material-symbols-outlined text-xl" style="">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="group hover:bg-white transition-colors bg-transparent">
+<td class="px-8 py-8" style="">
+<div class="flex items-center space-x-3">
+<div class="w-2 h-2 rounded-full bg-error"></div>
+<span class="font-bold text-slate-900" style="">Laboratório R&amp;D</span>
+</div>
+</td>
+<td class="px-8 py-8 text-sm text-slate-500 max-w-xs truncate" style="">Acesso restrito a pesquisadores e diretoria.</td>
+<td class="px-8 py-8 text-center" style="">
+<span class="inline-flex items-center px-4 py-1.5 rounded-full bg-[#dde1ff] text-[#001453] text-[11px] font-extrabold" style="">
+                                    15
+                                </span>
+</td>
+<td class="px-8 py-8 text-sm text-slate-500" style="">20 Dez, 2023</td>
+<td class="px-8 py-8 text-right" style="">
+<div class="flex justify-end space-x-4">
+<button class="text-slate-400 hover:text-slate-900 transition-colors" style="">
+<span class="material-symbols-outlined text-xl" style="">edit</span>
+</button>
+<button class="text-slate-400 hover:text-error transition-colors" style="">
+<span class="material-symbols-outlined text-xl" style="">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="group hover:bg-white transition-colors bg-transparent">
+<td class="px-8 py-8" style="">
+<div class="flex items-center space-x-3">
+<div class="w-2 h-2 rounded-full bg-[#001453]"></div>
+<span class="font-bold text-slate-900" style="">Logística &amp; Carga</span>
+</div>
+</td>
+<td class="px-8 py-8 text-sm text-slate-500 max-w-xs truncate" style="">Docas de recebimento e expedição de mercadorias.</td>
+<td class="px-8 py-8 text-center" style="">
+<span class="inline-flex items-center px-4 py-1.5 rounded-full bg-[#dde1ff] text-[#001453] text-[11px] font-extrabold" style="">
+                                    124
+                                </span>
+</td>
+<td class="px-8 py-8 text-sm text-slate-500" style="">15 Nov, 2023</td>
+<td class="px-8 py-8 text-right" style="">
+<div class="flex justify-end space-x-4">
+<button class="text-slate-400 hover:text-slate-900 transition-colors" style="">
+<span class="material-symbols-outlined text-xl" style="">edit</span>
+</button>
+<button class="text-slate-400 hover:text-error transition-colors" style="">
+<span class="material-symbols-outlined text-xl" style="">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination / Footer -->
+<div class="px-8 py-6 bg-slate-100 flex items-center justify-between">
+<span class="text-xs font-medium text-slate-500" style="">Exibindo 4 de 12 setores</span>
+<div class="flex space-x-2">
+<button class="px-4 py-2 rounded-lg text-sm font-bold text-slate-900 hover:bg-slate-200 transition-colors" style="">Anterior</button>
+<button class="px-5 py-2 rounded-lg bg-black text-white text-sm font-bold shadow-md hover:opacity-90 active:scale-95 transition-all" style="">Próximo</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
