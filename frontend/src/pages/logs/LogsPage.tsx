@@ -1,17 +1,7 @@
 import { useState } from 'react';
 import { History, Search, Filter, Download, FileText, Calendar as CalendarIcon, LogIn, LogOut } from 'lucide-react';
 import DataTable from '../../components/DataTable';
-
-interface LogEntry {
-  id: string;
-  user: string;
-  idNumber: string;
-  sector: string;
-  time: string;
-  date: string;
-  type: 'Entrada' | 'Saída' | 'Negado';
-  terminal: string;
-}
+import { MOCK_LOGS, LogEntry } from '../../examples/data';
 
 const LogsPage = () => {
   const [filterType, setFilterType] = useState<'Todos' | 'Entrada' | 'Saída' | 'Negado'>('Todos');
@@ -64,15 +54,7 @@ const LogsPage = () => {
     }
   ];
 
-  const mockLogs: LogEntry[] = [
-    { id: '1', user: 'Julian D. Vance', idNumber: '#4920-A', sector: 'Lab de Pesquisa C', time: '14:32:05', date: '12 Out, 2024', type: 'Entrada', terminal: 'T-Norte-01' },
-    { id: '2', user: 'Maria Lopez', idNumber: '#3112-B', sector: 'Sala de Servidores 01', time: '14:30:12', date: '12 Out, 2024', type: 'Saída', terminal: 'T-Core-04' },
-    { id: '3', user: 'Tentativa Não Autorizada', idNumber: 'VISITANTE-00', sector: 'Ala Administrativa', time: '14:25:31', date: '12 Out, 2024', type: 'Negado', terminal: 'T-Principal-00' },
-    { id: '4', user: 'Sarah Chen', idNumber: '#8821-X', sector: 'Doca de Carga', time: '14:15:44', date: '12 Out, 2024', type: 'Entrada', terminal: 'T-Portão-02' },
-    { id: '5', user: 'Julian D. Vance', idNumber: '#4920-A', sector: 'Lobby', time: '14:10:02', date: '12 Out, 2024', type: 'Saída', terminal: 'T-Portão-01' },
-  ];
-
-  const filteredLogs = filterType === 'Todos' ? mockLogs : mockLogs.filter(log => log.type === filterType);
+  const filteredLogs = filterType === 'Todos' ? MOCK_LOGS : MOCK_LOGS.filter(log => log.type === filterType);
 
   return (
     <div className="space-y-8 animate-in fade-in duration-700">
@@ -132,8 +114,8 @@ const LogsPage = () => {
         data={filteredLogs} 
         pagination={{
             currentPage: 1,
-            totalPages: 12,
-            totalItems: 114,
+            totalPages: 1,
+            totalItems: filteredLogs.length,
             onPageChange: () => {}
         }}
       />

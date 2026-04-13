@@ -2,15 +2,7 @@ import { useState } from 'react';
 import { MapPin, Plus, Edit2, Shield, MoreHorizontal, LayoutGrid, Trash2 } from 'lucide-react';
 import DataTable from '../../components/DataTable';
 import SentinelModal from '../../components/SentinelModal';
-
-interface SectorData {
-  id: string;
-  name: string;
-  zone: string;
-  occupancy: string;
-  status: 'Seguro' | 'Atenção' | 'Bloqueado';
-  authorizedRoles: string;
-}
+import { MOCK_SECTORS, SectorEntry as SectorData } from '../../examples/data';
 
 const SectorsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -74,12 +66,6 @@ const SectorsPage = () => {
       }
   ];
 
-  const mockSectors: SectorData[] = [
-    { id: 'SEC-A1', name: 'Sala de Servidores Principal', zone: 'Ala Norte', occupancy: '14%', status: 'Seguro', authorizedRoles: 'Administrador de TI, Super Supervisor' },
-    { id: 'SEC-C3', name: 'Laboratório de Pesquisa Gama', zone: 'Complexo Oeste', occupancy: '82%', status: 'Atenção', authorizedRoles: 'Equipe de Pesquisa, Admin' },
-    { id: 'SEC-Z9', name: 'Suíte Executiva', zone: 'Cobertura', occupancy: '5%', status: 'Bloqueado', authorizedRoles: 'Somente Membros da Diretoria' },
-    { id: 'SEC-B2', name: 'Doca de Carga', zone: 'Perímetro Sul', occupancy: '45%', status: 'Seguro', authorizedRoles: 'Logística, Operações' },
-  ];
 
   return (
     <div className="space-y-8 animate-in fade-in duration-700">
@@ -118,11 +104,11 @@ const SectorsPage = () => {
 
       <DataTable 
         columns={columns} 
-        data={mockSectors} 
+        data={MOCK_SECTORS} 
         pagination={{
             currentPage: 1,
             totalPages: 1,
-            totalItems: 4,
+            totalItems: MOCK_SECTORS.length,
             onPageChange: () => {}
         }}
       />

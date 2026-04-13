@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import ProtectedRoute from '../components/ProtectedRoute';
 import MainLayout from '../layouts/MainLayout';
 import LoginPage from '../pages/login/LoginPage';
 import RecoveryPage from '../pages/recovery/RecoveryPage';
@@ -15,12 +16,14 @@ const AppRouter = () => {
       <Route path="/recovery" element={<RecoveryPage />} />
 
       {/* Private Routes (Wrapped in MainLayout) */}
-      <Route element={<MainLayout />}>
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/logs" element={<LogsPage />} />
-        <Route path="/users" element={<UsersPage />} />
-        <Route path="/sectors" element={<SectorsPage />} />
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route element={<ProtectedRoute />}>
+        <Route element={<MainLayout />}>
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/logs" element={<LogsPage />} />
+          <Route path="/users" element={<UsersPage />} />
+          <Route path="/sectors" element={<SectorsPage />} />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        </Route>
       </Route>
 
       {/* Fallback */}
