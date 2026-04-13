@@ -30,12 +30,12 @@ const Sidebar = () => {
   return (
     <aside className="w-64 bg-slate-100 h-screen sticky top-0 flex flex-col py-6 border-r-0 shrink-0 hidden md:flex">
       <div className="px-6 mb-8">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white">
+        <NavLink to="/dashboard" className="flex items-center gap-3 mb-1 group">
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white transition-transform group-hover:scale-105">
             <Shield className="w-5 h-5" />
           </div>
-          <h1 className="font-headline text-xl font-extrabold text-slate-900">SCAP Admin</h1>
-        </div>
+          <h1 className="font-headline text-xl font-extrabold text-slate-900 group-hover:text-primary transition-colors">SCAP Admin</h1>
+        </NavLink>
         <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest px-1">Gestão de Segurança</p>
       </div>
 
