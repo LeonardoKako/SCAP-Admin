@@ -39,7 +39,7 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className='w-64 bg-slate-100 h-screen sticky top-0 flex flex-col py-6 border-r-0 shrink-0 hidden md:flex'>
+    <aside className='w-64 bg-slate-100 h-screen sticky top-0 flex-col py-6 border-r-0 shrink-0 hidden md:flex'>
       <div className='px-6 mb-8'>
         <NavLink to='/dashboard' className='flex items-center gap-3 mb-1 group'>
           <div className='w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white transition-transform group-hover:scale-105'>
