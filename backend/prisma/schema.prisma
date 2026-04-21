@@ -12,3 +12,54 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Profile {
+  id Int @id @default(autoincrement())
+  name String
+  users User[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("tb_profile")
+}
+
+model Sector {
+  id Int @id @default(autoincrement())
+  name String 
+  users User[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("tb_sector")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  name String 
+  email String @unique
+  profileId Int @map("profile_id")
+  profile Profile @relation(fields: [profileId], references: [id])
+  sectorId Int @map("sector_id")
+  sector Sector @relation(fields: [sectorId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  access Access[]
+
+  @@map("tb_user")
+}
+
+enum AccessType {
+  ENTRY
+  EXIT
+}
+
+model Access {
+  id Int @id @default(autoincrement())
+  userId Int @map("user_id")
+  user User @relation(fields: [userId], references: [id])
+  type AccessType @map("access_type")
+  dateTime DateTime @default(now())
+
+  @@map("tb_access")
+}
