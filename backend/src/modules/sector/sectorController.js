@@ -1,6 +1,7 @@
 import sectorService from "./sectorService.js";
 
 export async function listAll(req, res) {
+    
     try{
         const sectors = await sectorService.listAll();
         return res.status(200).json(sectors);
@@ -10,6 +11,7 @@ export async function listAll(req, res) {
             message: "Erro no servidor"
         });
     }
+    
 }
 
 
