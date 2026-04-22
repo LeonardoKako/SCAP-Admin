@@ -1,17 +1,17 @@
-import userService from "./userService.js";
+import accessService from "./accessService.js";
 
 export async function listAll(req, res) {
     
     try {
-        const users = await userService.listAll();
-        res.status(200).json(users);
+        const access = await accessService.listAll();
+        res.status(200).json(access);
     }
-    catch (error) {
+    catch(error) {
         res.status(500).json({
             message: "Erro no servidor"
         });
     }
-    
+
 }
 
 export default {

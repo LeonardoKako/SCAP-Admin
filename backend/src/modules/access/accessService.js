@@ -5,13 +5,12 @@ const prisma = new PrismaClient();
 async function listAll() {
     
     try {
-         const sectors = await prisma.sector.findMany();
-        return sectors;
+        const access = await prisma.access.findMany();
+        return access;
     }
     catch(error) {
         throw error;
-    } 
-    
+    }
 }
 
 export default {
