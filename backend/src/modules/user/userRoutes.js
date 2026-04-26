@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { listAll } from "./userController.js";
+import { getById, listAll } from "./userController.js";
 
 const router = new Router();
 
 router.get("/usuarios", listAll);
+router.get("/usuarios/:id", getById);
 
 export default router;

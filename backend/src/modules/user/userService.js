@@ -14,6 +14,22 @@ async function listAll() {
     
 }
 
+async function getById(userId) {
+
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+        })
+        
+        return user;
+        
+    } catch (error) {
+        throw new Error("Falha ao buscar usuário.")
+    }
+    
+}
+
 export default {
-    listAll
+    listAll,
+    getById
 };
