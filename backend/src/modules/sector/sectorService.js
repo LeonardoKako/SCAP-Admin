@@ -9,11 +9,26 @@ async function listAll() {
         return sectors;
     }
     catch(error) {
-        throw error;
+        throw new Error("Falha ao listar setores");
     } 
     
 }
 
+async function getById(sectorId) {
+    
+    try {
+        const sector = await prisma.sector.findUnique({
+            where: { id: sectorId },
+        })
+
+        return sector;
+
+    } catch(error) {
+        throw new Error("Falha ao buscar setor");
+    }
+}
+
 export default {
-    listAll
+    listAll,
+    getById
 };
