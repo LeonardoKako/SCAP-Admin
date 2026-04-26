@@ -13,6 +13,23 @@ async function listAll() {
     }
 }
 
+async function getById(accessId) {
+
+    try {
+
+        const access = await prisma.access.findUnique({
+            where: { id: accessId }
+        })
+
+        return access;
+
+    } catch(error) {
+        throw new Error("Falha ao buscar accesso.");
+    }
+    
+}
+
 export default {
-    listAll
+    listAll,
+    getById
 };
