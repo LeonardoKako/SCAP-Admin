@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { appError } from '../../errors/appError.js';
 
 const prisma = new PrismaClient();
 
@@ -15,18 +16,15 @@ async function listAll() {
 
 async function getById(accessId) {
 
-    try {
-
         const access = await prisma.access.findUnique({
             where: { id: accessId }
         })
 
-        return access;
+        if(access === null){
+            throw new appError("ID não corresponde a nenhum acesso", "ACCESS_NOT_FOUND", 404);
+        }
 
-    } catch(error) {
-        throw new Error("Falha ao buscar accesso.");
-    }
-    
+        return access;   
 }
 
 export default {
