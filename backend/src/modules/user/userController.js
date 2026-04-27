@@ -18,7 +18,7 @@ export async function getById(req, res, next) {
         const userId = Number(req.params.id);
 
         if(isNaN(userId)) {
-        throw new appError("INVALID_ID", "ID inválido", 400);
+        throw new appError("ID inválido", "INVALID_ID", 400);
         }
         
         const user = await userService.getById(userId);

@@ -22,7 +22,7 @@ async function getById(userId) {
     });
 
     if(user === null){
-        throw new appError("USER_NOT_FOUND", "ID não corresponde a nenhum usuário", 404);
+        throw new appError("ID não corresponde a nenhum usuário", "USER_NOT_FOUND", 404);
     }
         
     return user; 
