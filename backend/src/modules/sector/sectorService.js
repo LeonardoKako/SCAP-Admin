@@ -1,32 +1,30 @@
 import { PrismaClient } from '@prisma/client';
+import { appError } from '../../errors/appError.js';
 
 const prisma = new PrismaClient();
 
 async function listAll() {
-    
     try {
          const sectors = await prisma.sector.findMany();
         return sectors;
     }
     catch(error) {
-        throw new Error("Falha ao listar setores");
-    } 
-    
+        throw new Error("Falha ao listar setores.");
+    }    
 }
 
-async function getById(sectorId) {
-    
-    try {
-        const sector = await prisma.sector.findUnique({
-            where: { id: sectorId },
-        })
+async function getById(sectorId) {  
+    const sector = await prisma.sector.findUnique({
+        where: { id: sectorId },
+    });
 
-        return sector;
-
-    } catch(error) {
-        throw new Error("Falha ao buscar setor");
+    if (sector === null) {
+        throw new appError("ID não corresponde a nenhum setor.", "SECTOR_NOT_FOUND", 404)
     }
+
+    return sector;
 }
+
 
 export default {
     listAll,

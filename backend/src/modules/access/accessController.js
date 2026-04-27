@@ -1,3 +1,4 @@
+import { appError } from "../../errors/appError.js";
 import accessService from "./accessService.js";
 
 export async function listAll(req, res) {
@@ -14,47 +15,22 @@ export async function listAll(req, res) {
 
 }
 
-export async function getById(req, res) {
+export async function getById(req, res, next) {
+     try {
+        const accessId = Number(req.params.id);
 
-    const accessId = Number(req.params.id);
-
-    if(isNaN(accessId)) {
-        return res.status(400).json({
-            success: false,
-            error: {
-                code: "INVALID_ID",
-                message: "ID inválido"
-            }
-        });
-    }
-    
-    try {
+        if(isNaN(accessId)) {
+            throw new appError("Esse id não é válido", "INVALID_ID", 400);
+        }
 
         const access = await accessService.getById(accessId);
-
-        if(access === null) {
-            return res.status(404).json({
-                success: false,
-                error: {
-                    code: "ACCESS_NOT_FOUND",
-                    message: "Acesso não encontrado"
-                }
-            });
-        }
 
         return res.status(200).json({
             success: true,
             data: access
         });
-
     } catch(error) {
-        return res.status(500).json({
-            success: false,
-            error: {
-                code: "INTERNAL_SERVER_ERROR",
-                message: "Erro interno do servidor"
-            }
-        });
+        return next(error);
     }
 }
 
