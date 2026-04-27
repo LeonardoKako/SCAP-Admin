@@ -1,8 +1,8 @@
+import { appError } from "../../errors/appError.js";
 import userService from "./userService.js";
 
 export async function listAll(req, res) {
-    
-    try {
+       try {
         const users = await userService.listAll();
         res.status(200).json(users);
     }
@@ -10,37 +10,18 @@ export async function listAll(req, res) {
         res.status(500).json({
             message: "Erro no servidor"
         });
-    }
-    
+    }    
 }
 
-export async function getById(req, res) {
-    
-    const userId = Number(req.params.id);
+export async function getById(req, res, next) {
+    try {         
+        const userId = Number(req.params.id);
 
-    if(isNaN(userId)) {
-        return res.status(400).json({
-            success: false,
-            error: {
-                code: "INVALID_ID",
-                message: "ID inválido"
-            }
-        });
-    }
-
-    try {
+        if(isNaN(userId)) {
+        throw new appError("INVALID_ID", "ID inválido", 400);
+        }
         
         const user = await userService.getById(userId);
-
-        if(user === null){
-            return res.status(404).json({
-                success: false,
-                error: {
-                    code: "USER_NOT_FOUND",
-                    message: "Usuário não encontrado"
-                }
-            });
-        }
 
         return res.status(200).json({
             success: true,
@@ -48,13 +29,7 @@ export async function getById(req, res) {
         });
         
     } catch (error) {
-        return res.status(500).json({
-            success: false,
-            error: {
-                code: "INTERNAL_SERVER_ERROR",
-                message: "Erro interno no servidor"
-            }
-        });
+        return next(error);
     }
 }
 
