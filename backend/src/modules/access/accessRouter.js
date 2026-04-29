@@ -4,7 +4,7 @@ import { getById, listAll } from './accessController.js';
 const router = new Router();
 
 /**
- * @swagger
+ * @openapi
  * /acessos:
  *   get:
  *     summary: Lista todos os acessos
