@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getById, listAll } from "./userController.js";
+import { create, getById, listAll } from "./userController.js";
 
 const router = new Router();
 
@@ -67,5 +67,7 @@ router.get("/usuarios", listAll);
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/usuarios/:id", getById);
+
+router.post("/criar/usuario", create);
 
 export default router;

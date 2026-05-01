@@ -28,7 +28,23 @@ async function getById(userId) {
     return user; 
 }
 
+async function create(userBody) {
+    const { name, email, profileId, sectorId } = userBody;
+
+    const user = await prisma.user.create({
+        data: {
+            name: name,
+            email: email,
+            profileId: profileId,
+            sectorId: sectorId
+        }
+    });
+
+    return user;
+}
+
 export default {
     listAll,
-    getById
+    getById,
+    create
 };

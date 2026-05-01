@@ -33,7 +33,33 @@ export async function getById(req, res, next) {
     }
 }
 
+export async function create(req, res, next) {
+    try {
+        const { name, email, profileId, sectorId } = req.body;
+
+        const userBody = { 
+            name, 
+            email, 
+            profileId, 
+            sectorId 
+        };
+
+        const user = await userService.create(userBody);
+
+        const message = `Usuário ${name} cadastrado com sucesso!`;
+
+        return res.status(201).json({
+            success: true,
+            message: message,
+            data: user
+        });
+    } catch(error){
+        return next(error);
+    }
+}
+
 export default {
     listAll,
-    getById
+    getById,
+    create
 };
