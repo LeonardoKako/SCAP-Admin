@@ -32,8 +32,26 @@ export async function getById(req, res, next) {
     }  
 }
 
+export async function create(req, res, next) {
+    try {
+        const { name } = req.body;
+        const sector = await sectorService.create(name);
+        
+        const message = `Setor ${name} foi criado com sucesso!`;
+
+        return res.status(201).json({
+            success: true,
+            message: message,
+            data: sector
+        });
+    } catch (error) {
+        return next(error);
+    }
+}
+
 
 export default {
     listAll,
-    getById
+    getById,
+    create
 };
