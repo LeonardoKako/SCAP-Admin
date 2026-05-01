@@ -25,8 +25,27 @@ async function getById(sectorId) {
     return sector;
 }
 
+async function create(sectorName) {
+    const sector = await prisma.sector.create({
+        data: {
+            name: sectorName
+        }
+    });
+
+    return sector;
+}
+
+async function getByName(sectorName) {
+    const sector = await prisma.sector.findFirst({
+        where : { name: sectorName }
+    });
+
+    return sector;
+}
 
 export default {
     listAll,
-    getById
+    getById,
+    create,
+    getByName
 };

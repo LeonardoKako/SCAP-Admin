@@ -32,8 +32,41 @@ export async function getById(req, res, next) {
     }  
 }
 
+export async function create(req, res, next) {
+    try {
+        const { name } = req.body;
+
+        if(typeof name !== 'string'){
+            throw new appError("O nome do setor deve ser uma string", "INVALID_TYPE", 400);
+        }
+
+        const verifySectorName = await sectorService.getByName(name);
+
+        if(name === null || name.trim().length === 0) {
+            throw new appError("Nome está vazio ou contém apenas espaço.", "INVALID_NAME", 400);
+        }
+
+        if(verifySectorName) {
+            throw new appError(`O setor ${name} já está cadastrado!`, "SECTOR_ALREADY_EXISTS", 409);
+        }
+
+        const sector = await sectorService.create(name);
+        
+        const message = `Setor ${name} foi criado com sucesso!`;
+
+        return res.status(201).json({
+            success: true,
+            message: message,
+            data: sector
+        });   
+    } catch (error) {
+        return next(error);
+    }
+}
+
 
 export default {
     listAll,
-    getById
+    getById,
+    create
 };

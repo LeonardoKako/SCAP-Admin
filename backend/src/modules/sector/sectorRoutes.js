@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getById, listAll } from './sectorController.js';
+import { create, getById, listAll } from './sectorController.js';
 
 const router = Router();
 
@@ -67,6 +67,8 @@ router.get("/setores", listAll);
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/setores/:id", getById);
+
+router.post("/criar/setor", create);
 
 export default router;
 
