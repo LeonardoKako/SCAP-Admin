@@ -43,8 +43,17 @@ async function create(userBody) {
     return user;
 }
 
+async function getByEmail(userEmail) {   
+    const user = await prisma.user.findFirst({
+        where: { email: userEmail }
+    });
+
+    return user;
+}
+
 export default {
     listAll,
     getById,
-    create
+    create,
+    getByEmail
 };
