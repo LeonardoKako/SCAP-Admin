@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getById, listAll } from './accessController.js';
+import { create, getById, listAll } from './accessController.js';
 
 const router = new Router();
 
@@ -67,5 +67,7 @@ router.get("/acessos", listAll);
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/acessos/:id", getById);
+
+router.post("/registrar/acesso", create);
 
 export default router;

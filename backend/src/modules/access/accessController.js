@@ -34,7 +34,26 @@ export async function getById(req, res, next) {
     }
 }
 
+export async function create(req, res, next) {
+    try {
+        const { userId } = req.body;
+
+        const accessBody = { userId };
+
+        const access = await accessService.create(accessBody);
+
+        return res.status(201).json({
+            success: true,
+            message: "O acesso foi registrado com sucesso",
+            data: access
+        });
+    } catch(error){
+        return next(error);
+    }
+}
+
 export default {
     listAll,
-    getById
+    getById,
+    create
 };
