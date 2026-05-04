@@ -67,7 +67,57 @@ router.get("/setores", listAll);
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/setores/:id", getById);
-
+/**
+  * @openapi
+  * /criar/setor:
+  *   post:
+  *     summary: Cria um novo setor
+  *     tags: [Sector]
+  *     requestBody:
+  *       required: true
+  *       content:
+  *         application/json:
+  *           schema:
+  *             type: object
+  *             required:
+  *               - name
+  *             properties:
+  *               name:
+  *                 type: string
+  *                 example: "Financeiro"
+  *     responses:
+  *       201:
+  *         description: Setor criado com sucesso
+  *         content:
+  *           application/json:
+  *             schema:
+  *               type: object
+  *               properties:
+  *                 success:
+  *                   type: boolean
+  *                 message:
+  *                   type: string
+  *                 data:
+  *                   $ref: '#/components/schemas/Sector'
+  *       400:
+  *         description: Dados de entrada inválidos (campos vazios ou formatos incorretos)
+  *         content:
+  *           application/json:
+  *             schema:
+  *               $ref: '#/components/schemas/ErrorResponse'
+  *       409:
+  *         description: Setor já está registrado
+  *         content:
+  *           application/json:
+  *             schema:
+  *               $ref: '#/components/schemas/ErrorResponse'
+  *       500:
+  *         description: Erro interno no servidor
+  *         content:
+  *           application/json:
+  *             schema:
+  *               $ref: '#/components/schemas/ErrorResponse'
+  */
 router.post("/criar/setor", create);
 
 export default router;

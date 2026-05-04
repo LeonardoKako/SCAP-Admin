@@ -67,7 +67,57 @@ router.get("/acessos", listAll);
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/acessos/:id", getById);
-
+/**
+  * @openapi
+  * /registrar/acesso:
+  *   post:
+  *     summary: Registra um acesso novo
+  *     tags: [Access]
+  *     requestBody:
+  *       required: true
+  *       content:
+  *         application/json:
+  *           schema:
+  *             type: object
+  *             required:
+  *               - userId
+  *             properties:
+  *               userId:
+  *                 type: integer
+  *                 example: 1
+  *     responses:
+  *       201:
+  *         description: Acesso registrado com sucesso
+  *         content:
+  *           application/json:
+  *             schema:
+  *               type: object
+  *               properties:
+  *                 success:
+  *                   type: boolean
+  *                 message:
+  *                   type: string
+  *                 data:
+  *                   $ref: '#/components/schemas/Access'
+  *       400:
+  *         description: Dados de entrada inválidos (campos vazios ou formatos incorretos)
+  *         content:
+  *           application/json:
+  *             schema:
+  *               $ref: '#/components/schemas/ErrorResponse'
+  *       404:
+  *         description: userId não corresponde a nenhum usuário
+  *         content:
+  *           application/json:
+  *             schema:
+  *               $ref: '#/components/schemas/ErrorResponse'
+  *       500:
+  *         description: Erro interno no servidor
+  *         content:
+  *           application/json:
+  *             schema:
+  *               $ref: '#/components/schemas/ErrorResponse'
+  */
 router.post("/registrar/acesso", create);
 
 export default router;
