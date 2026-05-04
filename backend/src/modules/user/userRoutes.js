@@ -67,7 +67,70 @@ router.get("/usuarios", listAll);
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/usuarios/:id", getById);
-
+/**
+  * @openapi
+  * /criar/usuario:
+  *   post:
+  *     summary: Cria um novo usuário
+  *     tags: [User]
+  *     requestBody:
+  *       required: true
+  *       content:
+  *         application/json:
+  *           schema:
+  *             type: object
+  *             required:
+  *               - name
+  *               - email
+  *               - profileId
+  *               - sectorId
+  *             properties:
+  *               name:
+  *                 type: string
+  *                 example: "João Silva"
+  *               email:
+  *                 type: string
+  *                 format: email
+  *                 example: "joao@email.com"
+  *               profileId:
+  *                 type: integer
+  *                 example: 1
+  *               sectorId:
+  *                 type: integer
+  *                 example: 2
+  *     responses:
+  *       201:
+  *         description: Usuário criado com sucesso
+  *         content:
+  *           application/json:
+  *             schema:
+  *               type: object
+  *               properties:
+  *                 success:
+  *                   type: boolean
+  *                 message:
+  *                   type: string
+  *                 data:
+  *                   $ref: '#/components/schemas/User'
+  *       400:
+  *         description: Dados de entrada inválidos (campos vazios ou formatos incorretos)
+  *         content:
+  *           application/json:
+  *             schema:
+  *               $ref: '#/components/schemas/ErrorResponse'
+  *       409:
+  *         description: Email já está registrado
+  *         content:
+  *           application/json:
+  *             schema:
+  *               $ref: '#/components/schemas/ErrorResponse'
+  *       500:
+  *         description: Erro interno no servidor
+  *         content:
+  *           application/json:
+  *             schema:
+  *               $ref: '#/components/schemas/ErrorResponse'
+  */
 router.post("/criar/usuario", create);
 
 export default router;
