@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { create, getById, listAll } from './sectorController.js';
+import { create, getById, listAll, update } from './sectorController.js';
 
 const router = Router();
 
@@ -119,6 +119,8 @@ router.get("/setores/:id", getById);
   *               $ref: '#/components/schemas/ErrorResponse'
   */
 router.post("/criar/setor", create);
+
+router.put("/atualizar/setor/:id", update);
 
 export default router;
 

@@ -18,7 +18,7 @@ export async function getById(req, res, next) {
         const sectorId = Number(req.params.id);
     
         if(isNaN(sectorId)){
-            throw new appError("Esse ID não é válido.", "INVALID_ID", 400);
+            throw new appError("Esse ID deve ser um número é válido.", "INVALID_ID", 400);
         }
 
         const sector = await sectorService.getById(sectorId);
@@ -64,9 +64,46 @@ export async function create(req, res, next) {
     }
 }
 
+export async function update(req, res, next) {
+    try {
+        const sectorId = Number(req.params.id);
+
+        if(isNaN(sectorId)){
+            throw new appError("Esse ID deve ser um número é válido.", "INVALID_ID", 400);
+        }
+
+        const { name } = req.body;
+
+        const sectorBody = {
+            name: name
+        }
+
+        // método .getById() já trata erro 404
+        const verifySectorId = await sectorService.getById(sectorId);
+
+        if(isNaN(sectorId)) {
+            throw new appError("Esse ID deve ser um número é válido.", "INVALID_ID", 400);
+        }
+
+        const updatedSector = await sectorService.update(sectorBody, sectorId);
+
+        const message = `Setor ${name} atualizado com sucesso`;
+
+        return res.status(200).json({
+            success: true,
+            message: message,
+            data: updatedSector
+        });
+
+    } catch(error) {
+        return next(error);
+    }
+}
+
 
 export default {
     listAll,
     getById,
-    create
+    create,
+    update
 };

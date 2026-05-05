@@ -35,6 +35,19 @@ async function create(sectorName) {
     return sector;
 }
 
+async function update(sectorBody, sectorId){
+    const { name } = sectorBody;
+
+    const updatedSector = await prisma.sector.update({
+        where : { id: sectorId },
+        data: {
+            name: name
+        }
+    });
+
+    return updatedSector;
+}
+
 async function getByName(sectorName) {
     const sector = await prisma.sector.findFirst({
         where : { name: sectorName }
@@ -47,5 +60,6 @@ export default {
     listAll,
     getById,
     create,
+    update,
     getByName
 };
