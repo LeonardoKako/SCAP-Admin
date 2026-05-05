@@ -43,7 +43,7 @@ export async function create(req, res, next) {
         const verifySectorName = await sectorService.getByName(name);
 
         if(name === null || name.trim().length === 0) {
-            throw new appError("Nome está vazio ou contém apenas espaço.", "INVALID_NAME", 400);
+            throw new appError("Nome está vazio ou contém apenas espaço", "INVALID_NAME", 400);
         }
 
         if(verifySectorName) {
@@ -69,7 +69,7 @@ export async function update(req, res, next) {
         const sectorId = Number(req.params.id);
 
         if(isNaN(sectorId)){
-            throw new appError("Esse ID deve ser um número é válido.", "INVALID_ID", 400);
+            throw new appError("Esse ID deve ser um número é válido", "INVALID_ID", 400);
         }
 
         const { name } = req.body;
@@ -78,11 +78,21 @@ export async function update(req, res, next) {
             name: name
         }
 
+        if (typeof name !== 'string') {
+            throw new appError("O nome do setor deve ser uma string", "INVALID_TYPE", 400);
+        }
+
+        if(!name || name.trim().length === 0) {
+            throw new appError("Nome está vazio ou contém apenas espaço", "INVALID_NAME", 400);
+        }
+
         // método .getById() já trata erro 404
         const verifySectorId = await sectorService.getById(sectorId);
 
-        if(isNaN(sectorId)) {
-            throw new appError("Esse ID deve ser um número é válido.", "INVALID_ID", 400);
+        const verifySectorName = await sectorService.getByName(name);
+
+        if(verifySectorName && verifySectorName.id !== sectorId) {
+            throw new appError(`O setor ${name} já está cadastrado!`, "SECTOR_ALREADY_EXISTS", 409);
         }
 
         const updatedSector = await sectorService.update(sectorBody, sectorId);
