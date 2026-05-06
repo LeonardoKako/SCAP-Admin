@@ -18,7 +18,7 @@ export async function getById(req, res, next) {
         const userId = Number(req.params.id);
 
         if(isNaN(userId)) {
-        throw new appError("ID inválido", "INVALID_ID", 400);
+            throw new appError("ID inválido", "INVALID_ID", 400);
         }
         
         const user = await userService.getById(userId);
@@ -43,6 +43,10 @@ export async function create(req, res, next) {
             profileId, 
             sectorId 
         };
+
+        if(typeof name !== 'string' || typeof email !== 'string') {
+            throw new appError("O nome e o email devem ser uma string", "INVALID_FORMAT", 400);
+        }
 
         const cleanName = name?.trim();
         const cleanEmail = email?.trim().toLowerCase();
@@ -71,10 +75,6 @@ export async function create(req, res, next) {
             throw new appError("O formato do email não é válido", "INVALID_EMAIL_FORMAT", 400);
         }
 
-        if(typeof cleanName !== 'string' || typeof cleanEmail !== 'string') {
-            throw new appError("O nome e o email devem ser uma string", "INVALID_FORMAT", 400);
-        }
-
         const verifyExistingEmail = await userService.getByEmail(cleanEmail);
 
         if(verifyExistingEmail) {
@@ -95,8 +95,78 @@ export async function create(req, res, next) {
     }
 }
 
+export async function update(req, res, next) {
+    try {
+        const userId = Number(req.params.id);
+
+        if(isNaN(userId)) {
+            throw new appError("ID inválido", "INVALID_ID", 400);
+        }
+
+        const { name, email, profileId, sectorId } = req.body;
+
+        const userBody = {
+            name,
+            email,
+            profileId,
+            sectorId
+        };
+
+        // .getById() já trata erro 404
+        const verifyUserId = await userService.getById(userId);
+
+        if(typeof name !== 'string' || typeof email !== 'string') {
+            throw new appError("O nome e o email devem ser uma string", "INVALID_FORMAT", 400);
+        }
+
+        const cleanName = name.trim();
+        const cleanEmail = email.trim().toLowerCase();
+
+        if(!profileId || !sectorId) {
+            throw new appError("Perfil ou setor não foi preenchido para esse usuário!",
+                                "MISSING_FIELDS", 400);
+        }
+
+        if(typeof profileId !== 'number' || typeof sectorId !== 'number') {
+            throw new appError("Os IDs de perfil e setor devem ser números válidos",
+                            "INVALID_FORMAT", 400);
+        }
+
+        if(!cleanName || cleanName.length === 0) {
+            throw new appError("O nome não pode estar vazio ou ter apenas espaços.",
+                            "INVALID_NAME", 400);
+        }
+
+        if(!cleanEmail || cleanEmail.length === 0) {
+            throw new appError("O email não pode estar vazio ou ter apenas espaços.",
+                             "INVALID_EMAIL", 400);
+        }
+
+        if(!cleanEmail.includes("@")) {
+            throw new appError("O formato do email não é válido", "INVALID_EMAIL_FORMAT", 400);
+        }
+
+        const verifyExistingEmail = await userService.getByEmail(cleanEmail);
+
+        if(verifyExistingEmail && verifyExistingEmail.id !== userId) {
+            throw new appError("Esse email já está cadastrado!", "EMAIL_ALREADY_EXISTS", 409);
+        }
+
+        const updatedUser = await userService.update(userBody, userId);
+
+        return res.status(200).json({
+            success: true,
+            message: "Usuário atualizado com sucesso!",
+            data: updatedUser
+        });
+    } catch (error) {
+        return next(error);
+    }
+}
+
 export default {
     listAll,
     getById,
-    create
+    create,
+    update
 };

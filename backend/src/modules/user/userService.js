@@ -43,6 +43,21 @@ async function create(userBody) {
     return user;
 }
 
+async function update(userBody, userId) {
+    const { name, email, profileId, sectorId } = userBody;
+    const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: {
+            name: name,
+            email: email,
+            profileId: profileId,
+            sectorId: sectorId
+        }
+    });
+
+    return updatedUser;
+}
+
 async function getByEmail(userEmail) {   
     const user = await prisma.user.findFirst({
         where: { email: userEmail }
@@ -55,5 +70,6 @@ export default {
     listAll,
     getById,
     create,
+    update,
     getByEmail
 };
