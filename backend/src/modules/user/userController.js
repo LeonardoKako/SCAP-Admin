@@ -95,8 +95,34 @@ export async function create(req, res, next) {
     }
 }
 
+export async function update(req, res, next) {
+    try {
+        const userId = Number(req.params.id);
+
+        const { name, email, profileId, sectorId } = req.body;
+
+        const userBody = {
+            name,
+            email,
+            profileId,
+            sectorId
+        };
+
+        const updatedUser = await userService.update(userBody, userId);
+
+        return res.status(200).json({
+            success: true,
+            message: "Usuário atualizado com sucesso!",
+            data: updatedUser
+        });
+    } catch (error) {
+        return next(error);
+    }
+}
+
 export default {
     listAll,
     getById,
-    create
+    create,
+    update
 };

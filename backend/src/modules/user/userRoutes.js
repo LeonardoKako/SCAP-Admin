@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { create, getById, listAll } from "./userController.js";
+import { create, getById, listAll, update } from "./userController.js";
 
 const router = new Router();
 
@@ -132,5 +132,7 @@ router.get("/usuarios/:id", getById);
   *               $ref: '#/components/schemas/ErrorResponse'
   */
 router.post("/criar/usuario", create);
+
+router.put("/atualizar/usuario/:id", update);
 
 export default router;
