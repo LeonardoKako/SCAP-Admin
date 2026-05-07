@@ -53,8 +53,22 @@ async function create(accessBody) {
     return access;
 }
 
+async function update(accessBody, accessId) {
+    const { dateTime } = accessBody;
+
+    const updatedAccess = await prisma.access.update({
+        where: { id: accessId },
+        data: {
+            dateTime: dateTime
+        }
+    });
+
+    return updatedAccess;
+}
+
 export default {
     listAll,
     getById,
-    create
+    create,
+    update
 };

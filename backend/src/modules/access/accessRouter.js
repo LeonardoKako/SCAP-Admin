@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { create, getById, listAll } from './accessController.js';
+import { create, getById, listAll, update } from './accessController.js';
 
 const router = new Router();
 
@@ -120,4 +120,5 @@ router.get("/acessos/:id", getById);
   */
 router.post("/registrar/acesso", create);
 
+router.patch("/atualizar/acesso/:id", update);
 export default router;
