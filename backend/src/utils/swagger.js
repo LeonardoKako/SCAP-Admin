@@ -108,11 +108,7 @@ const swaggerOptions = {
     apis: [path.resolve(process.cwd(), 'backend/src/modules/**/*.js')],
 };
 
-console.log(swaggerOptions.apis);
-
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-
-console.log(swaggerDocs.paths);
 
 export const setupSwagger = (app) => {
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));

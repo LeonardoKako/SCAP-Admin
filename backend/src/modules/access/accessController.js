@@ -107,13 +107,6 @@ export async function update(req, res, next) {
             dateTime: formattedDateTime
         };
 
-        const verifyAccessId = await accessService.getById(accessId);
-
-        if(!verifyAccessId) {
-            throw new appError("Não é possível atualizar o acesso, porque o id não corresponde a nenhum acesso!",
-                             "ACCESS_NOT_FOUND", 404);
-        }
-
         // Tratar se o horário atualizado está entre o horário do acesso anterior e do posterior. 
         // Não deve ser possível atualizar um acesso para antes do acesso anterior nem pra depois do posterior
         // Solução provável é buscar no banco o acesso anterior e posterior
