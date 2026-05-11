@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { appError } from '../../errors/appError.js';
 
 const prisma = new PrismaClient();
@@ -19,7 +19,7 @@ async function getById(sectorId) {
     });
 
     if (sector === null) {
-        throw new appError("ID não corresponde a nenhum setor.", "SECTOR_NOT_FOUND", 404)
+        throw new appError("ID não corresponde a nenhum setor.", "SECTOR_NOT_FOUND", 404);
     }
 
     return sector;
@@ -48,6 +48,26 @@ async function update(sectorBody, sectorId){
     return updatedSector;
 }
 
+async function deleteSector(sectorId) {
+    const id = Number(sectorId);
+    if(isNaN(id)) {
+        throw new appError("Esse ID deve ser um número é válido", "INVALID_ID", 400);
+    }
+    // Já trata erro na função 
+    await getById(sectorId);
+
+    const usersCount = await getNumberOfLinkedUsers(sectorId);
+    if(usersCount > 0) {
+        throw new appError(`Esse setor possui ${usersCount} usuários vinculados a ele. Não é possível deletar!`,
+                        "CONFLICT", 409);
+    }
+
+    const deletedSector = await prisma.sector.delete({
+    where: { id: sectorId }
+    });
+}  
+
+
 async function getByName(sectorName) {
     const sector = await prisma.sector.findFirst({
         where : { name: sectorName }
@@ -56,10 +76,19 @@ async function getByName(sectorName) {
     return sector;
 }
 
+async function getNumberOfLinkedUsers(sectorId) {
+    const count = await prisma.user.count({
+         where: { sectorId: sectorId }
+    });
+
+    return count;
+}
+
 export default {
     listAll,
     getById,
     create,
     update,
+    deleteSector,
     getByName
 };

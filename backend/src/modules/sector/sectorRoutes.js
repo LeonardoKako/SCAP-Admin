@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { create, getById, listAll, update } from './sectorController.js';
+import { create, deleteSector, getById, listAll, update } from './sectorController.js';
 
 const router = Router();
 
@@ -122,5 +122,6 @@ router.post("/criar/setor", create);
 
 router.put("/atualizar/setor/:id", update);
 
+router.delete("/deletar/setor/:id", deleteSector);
 export default router;
 

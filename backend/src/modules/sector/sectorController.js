@@ -110,6 +110,16 @@ export async function update(req, res, next) {
     }
 }
 
+export async function deleteSector(req, res, next) {
+    try {
+        const sectorId = Number(req.params.id);
+        await sectorService.deleteSector(sectorId);
+        return res.status(204).end();
+    } catch (error) {
+        return next(error);
+    }
+}
+
 
 export default {
     listAll,
