@@ -164,9 +164,20 @@ export async function update(req, res, next) {
     }
 }
 
+export async function deleteUser(req, res, next) {
+    try {
+        const userId = Number(req.params.id);
+        await userService.deleteUser(userId);
+        return res.status(204).end();
+    } catch(error) {
+        return next(error);
+    }
+}
+
 export default {
     listAll,
     getById,
     create,
+    deleteUser,
     update
 };
