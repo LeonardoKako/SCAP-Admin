@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { create, getById, listAll, update } from "./userController.js";
+import { create, deleteUser, getById, listAll, update } from "./userController.js";
 
 const router = new Router();
 
@@ -134,5 +134,7 @@ router.get("/usuarios/:id", getById);
 router.post("/criar/usuario", create);
 
 router.put("/atualizar/usuario/:id", update);
+
+router.delete("/deletar/usuario/:id", deleteUser);
 
 export default router;
