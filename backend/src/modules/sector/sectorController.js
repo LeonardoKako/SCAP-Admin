@@ -1,15 +1,13 @@
 import { appError } from "../../errors/appError.js";
 import sectorService from "./sectorService.js";
 
-export async function listAll(req, res) {   
+export async function listAll(req, res, next) {   
     try{
         const sectors = await sectorService.listAll();
         return res.status(200).json(sectors);
     }
     catch(error){
-        return res.status(500).json({
-            message: "Erro no servidor"
-        });
+        return next(error);
     }  
 }
 
@@ -87,7 +85,7 @@ export async function update(req, res, next) {
         }
 
         // método .getById() já trata erro 404
-        const verifySectorId = await sectorService.getById(sectorId);
+        await sectorService.getById(sectorId);
 
         const verifySectorName = await sectorService.getByName(name);
 
