@@ -4,15 +4,8 @@ import { appError } from "../../errors/appError.js";
 const prisma = new PrismaClient();
 
 async function listAll() {
-   
-    try {
         const users = await prisma.user.findMany();
-        return users;
-    }
-    catch(error) {
-        throw new Error("Falha ao listar usuários")
-    }
-    
+        return users; 
 }
 
 async function getById(userId) {
@@ -70,7 +63,7 @@ async function deleteUser(userId) {
     // Faz uma transaction (As duas operações sempre acontecem juntas. Se uma falhar, a outra dá ROLLBACK)
     // Deleta todos os acessos vinculados a um usuário que será deletado
     // É possível fazer algo melhor, fazendo uma deleção invisível, mas aumenta um pouco a complexidade
-    const deletedUser = await prisma.$transaction([
+    await prisma.$transaction([
         prisma.access.deleteMany({ where: { userId: userId } }),
         prisma.user.delete({ where: { id: userId } })       
     ]);

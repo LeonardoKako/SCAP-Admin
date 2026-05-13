@@ -1,16 +1,11 @@
-import { PrismaClient, Prisma } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { appError } from '../../errors/appError.js';
 
 const prisma = new PrismaClient();
 
 async function listAll() {
-    try {
          const sectors = await prisma.sector.findMany();
-        return sectors;
-    }
-    catch(error) {
-        throw new Error("Falha ao listar setores.");
-    }    
+        return sectors;    
 }
 
 async function getById(sectorId) {  
@@ -62,8 +57,8 @@ async function deleteSector(sectorId) {
                         "CONFLICT", 409);
     }
 
-    const deletedSector = await prisma.sector.delete({
-    where: { id: sectorId }
+    await prisma.sector.delete({
+        where: { id: sectorId }
     });
 }  
 

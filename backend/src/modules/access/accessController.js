@@ -1,16 +1,14 @@
 import { appError } from "../../errors/appError.js";
 import accessService from "./accessService.js";
 
-export async function listAll(req, res) {
+export async function listAll(req, res, next) {
     
     try {
         const access = await accessService.listAll();
         res.status(200).json(access);
     }
     catch(error) {
-        res.status(500).json({
-            message: "Erro no servidor"
-        });
+        return next(error);
     }
 
 }

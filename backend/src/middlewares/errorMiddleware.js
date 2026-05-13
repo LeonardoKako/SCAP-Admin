@@ -1,4 +1,4 @@
-export const errorMiddleware = (error, req, res, next) => {
+export const errorMiddleware = (error, req, res, _next) => {
 
     if(error.isOperational) {
         return res.status(error.statusCode).json({

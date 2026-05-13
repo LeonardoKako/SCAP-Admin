@@ -1,15 +1,13 @@
 import { appError } from "../../errors/appError.js";
 import userService from "./userService.js";
 
-export async function listAll(req, res) {
+export async function listAll(req, res, next) {
        try {
         const users = await userService.listAll();
         res.status(200).json(users);
     }
     catch (error) {
-        res.status(500).json({
-            message: "Erro no servidor"
-        });
+        return next(error);
     }    
 }
 
@@ -113,7 +111,7 @@ export async function update(req, res, next) {
         };
 
         // .getById() já trata erro 404
-        const verifyUserId = await userService.getById(userId);
+        await userService.getById(userId);
 
         if(typeof name !== 'string' || typeof email !== 'string') {
             throw new appError("O nome e o email devem ser uma string", "INVALID_FORMAT", 400);

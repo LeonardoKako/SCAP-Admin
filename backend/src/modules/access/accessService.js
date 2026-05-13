@@ -4,14 +4,8 @@ import { appError } from '../../errors/appError.js';
 const prisma = new PrismaClient();
 
 async function listAll() {
-    
-    try {
         const access = await prisma.access.findMany();
         return access;
-    }
-    catch(error) {
-        throw error;
-    }
 }
 
 async function getById(accessId) {
