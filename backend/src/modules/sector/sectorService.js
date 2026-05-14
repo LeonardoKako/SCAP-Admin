@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../database/prisma.js';
 import { appError } from '../../errors/appError.js';
-
-const prisma = new PrismaClient();
 
 async function listAll() {
          const sectors = await prisma.sector.findMany();
