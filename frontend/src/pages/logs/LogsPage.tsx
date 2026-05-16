@@ -1,10 +1,17 @@
 import { useState } from 'react';
-import { History, Search, Filter, Download, FileText, Calendar as CalendarIcon, LogIn, LogOut } from 'lucide-react';
+import { History, Search, Download, FileText, Calendar as CalendarIcon, LogIn, LogOut } from 'lucide-react';
 import DataTable from '../../components/DataTable';
 import { MOCK_LOGS, LogEntry } from '../../examples/data';
+import { toast } from 'react-toastify';
 
 const LogsPage = () => {
   const [filterType, setFilterType] = useState<'Todos' | 'Entrada' | 'Saída' | 'Negado'>('Todos');
+
+  const handleFutureFeature = () => {
+    toast.info('Funcionalidade em desenvolvimento. Disponível em breve!', {
+      icon: '🚀'
+    });
+  };
 
   const columns = [
     {
@@ -35,7 +42,6 @@ const LogsPage = () => {
         </div>
       )
     },
-    { header: 'Terminal de Acesso', accessor: 'terminal' },
     { 
       header: 'Evento de Acesso', 
       align: 'right' as const,
@@ -64,11 +70,17 @@ const LogsPage = () => {
           <p className="text-on-surface-variant font-medium mt-1">Histórico completo de todas as atividades de terminal e verificações de permissão.</p>
         </div>
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 bg-white border border-slate-200 text-slate-600 px-5 py-3 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all">
+          <button 
+            onClick={handleFutureFeature}
+            className="flex items-center gap-2 bg-white border border-slate-200 text-slate-600 px-5 py-3 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all"
+          >
             <Download className="w-5 h-5" />
             Exportar Arquivo
           </button>
-          <button className="flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-bold text-sm shadow-xl shadow-primary/20 hover:opacity-90 active:scale-95 transition-all">
+          <button 
+            onClick={handleFutureFeature}
+            className="flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-bold text-sm shadow-xl shadow-primary/20 hover:opacity-90 active:scale-95 transition-all"
+          >
             <FileText className="w-5 h-5" />
             Gerar Relatório
           </button>
@@ -96,17 +108,16 @@ const LogsPage = () => {
             ))}
         </div>
 
-        <button className="flex items-center gap-2 px-4 py-2 text-slate-400 font-bold text-xs uppercase tracking-widest hover:text-slate-900 transition-all">
-            <Filter className="w-4 h-4" />
-            Avançado
-        </button>
-        
         <div className="h-4 w-px bg-slate-200 mx-2"></div>
 
-        <button className="flex items-center gap-2 px-4 py-2 text-slate-400 font-bold text-xs uppercase tracking-widest hover:text-slate-900 transition-all">
-            <CalendarIcon className="w-4 h-4" />
-            12 Out, 2024
-        </button>
+        <div className="relative group">
+            <input 
+              type="date" 
+              className="appearance-none bg-transparent border-none text-slate-400 font-bold text-xs uppercase tracking-widest focus:ring-0 cursor-pointer hover:text-slate-900 transition-all outline-none"
+              defaultValue="2024-10-12"
+            />
+            <CalendarIcon className="w-4 h-4 text-slate-400 absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none group-hover:text-slate-900 transition-all" />
+        </div>
       </div>
 
       <DataTable 
