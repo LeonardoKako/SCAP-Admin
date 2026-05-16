@@ -24,29 +24,6 @@ const SectorsPage = () => {
         </div>
       )
     },
-    { header: 'Zona Geográfica', accessor: 'zone' },
-    { 
-      header: 'Ocupação Atual', 
-      accessor: (sector: SectorData) => (
-        <div className="flex items-center gap-3">
-          <div className="flex-1 h-1.5 w-24 bg-slate-100 rounded-full overflow-hidden">
-            <div className="h-full bg-primary" style={{ width: sector.occupancy }}></div>
-          </div>
-          <span className="text-xs font-bold text-slate-900">{sector.occupancy}</span>
-        </div>
-      )
-    },
-    { 
-      header: 'Nível de Segurança', 
-      accessor: (sector: SectorData) => (
-        <span className={`px-3 py-1 rounded-lg text-[10px] font-extrabold uppercase tracking-widest ${
-          sector.status === 'Seguro' ? 'bg-green-50 text-green-600' : 
-          sector.status === 'Bloqueado' ? 'bg-red-50 text-red-600' : 'bg-amber-50 text-amber-600'
-        }`}>
-          {sector.status}
-        </span>
-      )
-    },
     {
         header: 'Ações',
         align: 'right' as const,
@@ -57,9 +34,6 @@ const SectorsPage = () => {
               className="p-2 text-slate-300 hover:text-primary transition-all rounded-lg hover:bg-slate-100"
             >
               <Edit2 className="w-4 h-4" />
-            </button>
-            <button className="p-2 text-slate-300 hover:text-slate-900 transition-all rounded-lg hover:bg-slate-100">
-              <MoreHorizontal className="w-4 h-4" />
             </button>
           </div>
         )
@@ -72,28 +46,23 @@ const SectorsPage = () => {
       <div className="flex items-end justify-between">
         <div>
           <h2 className="text-3xl font-headline font-extrabold tracking-tight text-on-surface">Infraestrutura do Setor</h2>
-          <p className="text-on-surface-variant font-medium mt-1">Defina zonas geográficas e requisitos individuais de autorização de segurança.</p>
+          <p className="text-on-surface-variant font-medium mt-1">Defina requisitos individuais de autorização de segurança para cada setor.</p>
         </div>
         <button 
           onClick={() => setIsModalOpen(true)}
           className="flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-bold text-sm shadow-xl shadow-primary/20 hover:opacity-90 active:scale-95 transition-all"
         >
-          <LayoutGrid className="w-5 h-5" />
-          Propor Novo Setor
+          <Plus className="w-5 h-5" />
+          Criar Novo Setor
         </button>
       </div>
 
       {/* Stats Cards (Specific to Sectors) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
             <Shield className="w-6 h-6 text-primary mb-3" />
-            <div className="text-2xl font-headline font-extrabold text-on-surface">18 Zonas Ativas</div>
+            <div className="text-2xl font-headline font-extrabold text-on-surface">18 Setores Ativos</div>
             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Vigilância Operacional</p>
-        </div>
-        <div className="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
-            <MapPin className="w-6 h-6 text-primary mb-3" />
-            <div className="text-2xl font-headline font-extrabold text-on-surface">4 Complexos</div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Perímetro Global</p>
         </div>
         <div className="bg-white p-6 rounded-xl border border-slate-100 shadow-sm border-l-4 border-l-error">
             <Shield className="w-6 h-6 text-error mb-3" />
@@ -117,32 +86,12 @@ const SectorsPage = () => {
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)}
         title="Mapear Novo Setor"
-        subtitle="Defina os limites físicos e a lógica de segurança do espaço de trabalho."
+        subtitle="Defina o nome e a lógica de segurança do espaço de trabalho."
       >
         <div className="space-y-6">
           <div className="space-y-1.5">
             <label className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 px-1">Nome / Rótulo do Setor</label>
             <input type="text" className="w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-3 text-sm font-medium focus:ring-1 focus:ring-primary/20 outline-none" placeholder="ex. Laboratório de Pesquisa C" />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 px-1">Zona Geográfica</label>
-              <select className="w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-3 text-sm font-medium focus:ring-1 focus:ring-primary/20 outline-none">
-                <option>Ala Norte</option>
-                <option>Perímetro Sul</option>
-                <option>Complexo Oeste</option>
-                <option>Cobertura</option>
-              </select>
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 px-1">Nível de Segurança Inicial</label>
-              <select className="w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-3 text-sm font-medium focus:ring-1 focus:ring-primary/20 outline-none">
-                <option>Seguro (Padrão)</option>
-                <option>Restrito (Apenas Admin)</option>
-                <option>Isolado (Sem Acesso)</option>
-              </select>
-            </div>
           </div>
 
           <div className="space-y-3">
@@ -162,32 +111,12 @@ const SectorsPage = () => {
         isOpen={isEditModalOpen} 
         onClose={() => setIsEditModalOpen(false)}
         title="Editar Setor"
-        subtitle="Modifique os parâmetros e o nível de segurança do setor selecionado."
+        subtitle="Modifique os parâmetros do setor selecionado."
       >
         <div className="space-y-6">
           <div className="space-y-1.5">
             <label className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 px-1">Nome / Rótulo do Setor</label>
             <input type="text" defaultValue={selectedSector?.name} className="w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-3 text-sm font-medium focus:ring-1 focus:ring-primary/20 outline-none" placeholder="ex. Laboratório de Pesquisa C" />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 px-1">Zona Geográfica</label>
-              <select defaultValue={selectedSector?.zone || "Ala Norte"} className="w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-3 text-sm font-medium focus:ring-1 focus:ring-primary/20 outline-none">
-                <option>Ala Norte</option>
-                <option>Perímetro Sul</option>
-                <option>Complexo Oeste</option>
-                <option>Cobertura</option>
-              </select>
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 px-1">Nível de Segurança</label>
-              <select defaultValue={selectedSector?.status === 'Seguro' ? 'Seguro (Padrão)' : selectedSector?.status === 'Bloqueado' ? 'Isolado (Sem Acesso)' : 'Restrito (Apenas Admin)'} className="w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-3 text-sm font-medium focus:ring-1 focus:ring-primary/20 outline-none">
-                <option>Seguro (Padrão)</option>
-                <option>Atenção (Restrito)</option>
-                <option>Isolado (Sem Acesso)</option>
-              </select>
-            </div>
           </div>
 
           <div className="space-y-3">

@@ -60,9 +60,6 @@ export const ALLOWED_SECTORS: Sector[] = [SECTORS.ADMIN, SECTORS.IT];
 export interface SectorEntry {
   id: string;
   name: string;
-  zone: string;
-  occupancy: string;
-  status: 'Seguro' | 'Atenção' | 'Bloqueado';
   authorizedRoles: string;
 }
 
@@ -70,33 +67,21 @@ export const MOCK_SECTORS: SectorEntry[] = [
   { 
     id: 'SEC-A1', 
     name: 'Sala de Servidores Principal', 
-    zone: 'Ala Norte', 
-    occupancy: '14%', 
-    status: 'Seguro', 
     authorizedRoles: 'Administrador de TI, Super Supervisor' 
   },
   { 
     id: 'SEC-C3', 
     name: 'Laboratório de Pesquisa Gama', 
-    zone: 'Complexo Oeste', 
-    occupancy: '82%', 
-    status: 'Atenção', 
     authorizedRoles: 'Equipe de Pesquisa, Admin' 
   },
   { 
     id: 'SEC-Z9', 
     name: 'Suíte Executiva', 
-    zone: 'Cobertura', 
-    occupancy: '5%', 
-    status: 'Bloqueado', 
     authorizedRoles: 'Somente Membros da Diretoria' 
   },
   { 
     id: 'SEC-B2', 
     name: 'Doca de Carga', 
-    zone: 'Perímetro Sul', 
-    occupancy: '45%', 
-    status: 'Seguro', 
     authorizedRoles: 'Logística, Operações' 
   },
 ];
@@ -109,14 +94,13 @@ export interface LogEntry {
   time: string;
   date: string;
   type: 'Entrada' | 'Saída' | 'Negado';
-  terminal: string;
 }
 
 export const MOCK_LOGS: LogEntry[] = [
-  { id: '1', user: 'Administrador Sistema', idNumber: 'USR-1', sector: 'Sala de Servidores Principal', time: '14:32:05', date: '21 Abr, 2024', type: 'Entrada', terminal: 'T-Norte-01' },
-  { id: '2', user: 'Analista de Suporte', idNumber: 'USR-2', sector: 'Sala de Servidores Principal', time: '14:30:12', date: '21 Abr, 2024', type: 'Saída', terminal: 'T-Core-04' },
-  { id: '3', user: 'Gerente Financeiro', idNumber: 'USR-3', sector: 'Sala de Servidores Principal', time: '14:25:31', date: '21 Abr, 2024', type: 'Negado', terminal: 'T-Principal-00' },
-  { id: '4', user: 'Executivo de Vendas', idNumber: 'USR-4', sector: 'Doca de Carga', time: '14:15:44', date: '21 Abr, 2024', type: 'Entrada', terminal: 'T-Portão-02' },
-  { id: '5', user: 'Analista de Suporte', idNumber: 'USR-2', sector: 'Lobby', time: '14:10:02', date: '21 Abr, 2024', type: 'Saída', terminal: 'T-Portão-01' },
-  { id: '6', user: 'Tentativa Não Autorizada', idNumber: 'DESCONHECIDO', sector: 'Suíte Executiva', time: '13:55:20', date: '21 Abr, 2024', type: 'Negado', terminal: 'T-Elevador-05' },
+  { id: '1', user: 'Administrador Sistema', idNumber: 'USR-1', sector: 'Sala de Servidores Principal', time: '14:32:05', date: '21 Abr, 2024', type: 'Entrada' },
+  { id: '2', user: 'Analista de Suporte', idNumber: 'USR-2', sector: 'Sala de Servidores Principal', time: '14:30:12', date: '21 Abr, 2024', type: 'Saída' },
+  { id: '3', user: 'Gerente Financeiro', idNumber: 'USR-3', sector: 'Sala de Servidores Principal', time: '14:25:31', date: '21 Abr, 2024', type: 'Negado' },
+  { id: '4', user: 'Executivo de Vendas', idNumber: 'USR-4', sector: 'Doca de Carga', time: '14:15:44', date: '21 Abr, 2024', type: 'Entrada' },
+  { id: '5', user: 'Analista de Suporte', idNumber: 'USR-2', sector: 'Lobby', time: '14:10:02', date: '21 Abr, 2024', type: 'Saída' },
+  { id: '6', user: 'Tentativa Não Autorizada', idNumber: 'DESCONHECIDO', sector: 'Suíte Executiva', time: '13:55:20', date: '21 Abr, 2024', type: 'Negado' },
 ];

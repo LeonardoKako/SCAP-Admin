@@ -9,6 +9,9 @@ interface SentinelModalProps {
   subtitle?: string;
   children: React.ReactNode;
   footer?: React.ReactNode;
+  maxWidth?: string;
+  onSave?: () => void;
+  saveLabel?: string;
 }
 
 const SentinelModal: React.FC<SentinelModalProps> = ({ 
@@ -17,7 +20,10 @@ const SentinelModal: React.FC<SentinelModalProps> = ({
   title, 
   subtitle, 
   children,
-  footer 
+  footer,
+  maxWidth = 'max-w-lg',
+  onSave,
+  saveLabel = 'Salvar Alterações'
 }) => {
   if (!isOpen) return null;
 
@@ -30,7 +36,7 @@ const SentinelModal: React.FC<SentinelModalProps> = ({
       />
       
       {/* Modal Container */}
-      <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl shadow-slate-900/20 overflow-hidden transform transition-all animate-in zoom-in-95 duration-300">
+      <div className={`relative w-full ${maxWidth} bg-white rounded-2xl shadow-2xl shadow-slate-900/20 overflow-hidden transform transition-all animate-in zoom-in-95 duration-300`}>
         {/* Header */}
         <div className="px-8 py-6 flex justify-between items-start border-b border-slate-50">
           <div>
@@ -61,10 +67,13 @@ const SentinelModal: React.FC<SentinelModalProps> = ({
               onClick={onClose}
               className="px-6 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors"
             >
-              Cancel
+              Cancelar
             </button>
-            <button className="px-6 py-2.5 rounded-lg bg-primary text-white text-sm font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all">
-              Save Changes
+            <button 
+              onClick={onSave}
+              className="px-6 py-2.5 rounded-lg bg-primary text-white text-sm font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all"
+            >
+              {saveLabel}
             </button>
           </div>
         )}

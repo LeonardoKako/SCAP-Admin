@@ -20,6 +20,7 @@ function cn(...inputs: ClassValue[]) {
 const Sidebar = () => {
   const navigate = useNavigate();
   const logout = useAuthStore((state) => state.logout);
+  const setSettingsModalOpen = useAuthStore((state) => state.setSettingsModalOpen);
 
   const navItems = [
     { icon: LayoutDashboard, label: "Painel", path: "/dashboard" },
@@ -28,9 +29,6 @@ const Sidebar = () => {
     { icon: MapPin, label: "Setores", path: "/sectors" },
   ];
 
-  const bottomItems = [
-    { icon: Settings, label: "Configurações", path: "/configuracoes" },
-  ];
 
   const handleLogout = () => {
     logout();
@@ -75,23 +73,13 @@ const Sidebar = () => {
       </nav>
 
       <div className='px-4 mt-auto space-y-1 border-t border-slate-200 pt-6'>
-        {bottomItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            className={({ isActive }) =>
-              cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group text-sm font-bold",
-                isActive
-                  ? "bg-slate-200 text-slate-900 shadow-sm"
-                  : "text-slate-500 hover:bg-slate-200 hover:text-slate-900",
-              )
-            }
-          >
-            <item.icon className='w-5 h-5 shrink-0' />
-            <span>{item.label}</span>
-          </NavLink>
-        ))}
+        <button
+          onClick={() => setSettingsModalOpen(true)}
+          className='flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group text-sm font-bold text-slate-500 hover:bg-slate-200 hover:text-slate-900 w-full'
+        >
+          <Settings className='w-5 h-5 shrink-0' />
+          <span>Configurações</span>
+        </button>
 
         {/* Botão de Logout */}
         <button
