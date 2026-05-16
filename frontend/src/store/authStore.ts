@@ -5,8 +5,10 @@ import { User, MOCK_USERS, ALLOWED_SECTORS } from '../examples/data';
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
+  isSettingsModalOpen: boolean;
   login: (email: string, password: string) => { success: boolean; message?: string };
   logout: () => void;
+  setSettingsModalOpen: (open: boolean) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -14,6 +16,7 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       user: null,
       isAuthenticated: false,
+      isSettingsModalOpen: false,
       login: (email, password) => {
         const foundUser = MOCK_USERS.find(
           (u) => u.email === email && u.password === password
@@ -41,6 +44,9 @@ export const useAuthStore = create<AuthState>()(
       },
       logout: () => {
         set({ user: null, isAuthenticated: false });
+      },
+      setSettingsModalOpen: (open) => {
+        set({ isSettingsModalOpen: open });
       },
     }),
     {

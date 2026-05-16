@@ -40,24 +40,7 @@ const UsersPage = () => {
         </div>
       ),
     },
-    { header: "Nível de Acesso / Cargo", accessor: "role" },
     { header: "Setor", accessor: "sector" },
-    {
-      header: "Status de Segurança",
-      accessor: (user: UserData) => (
-        <span
-          className={`px-3 py-1 rounded-lg text-[10px] font-extrabold uppercase tracking-widest ${
-            user.status === "Ativo"
-              ? "bg-green-50 text-green-600"
-              : user.status === "Revogado"
-                ? "bg-red-50 text-red-600"
-                : "bg-slate-100 text-slate-500"
-          }`}
-        >
-          {user.status}
-        </span>
-      ),
-    },
     { header: "Última Atividade", accessor: "lastAccess" },
     {
       header: "Ações",
@@ -72,9 +55,6 @@ const UsersPage = () => {
             className='p-2 text-slate-300 hover:text-primary transition-all rounded-lg hover:bg-slate-100'
           >
             <Edit2 className='w-4 h-4' />
-          </button>
-          <button className='p-2 text-slate-300 hover:text-slate-900 transition-all rounded-lg hover:bg-slate-100'>
-            <MoreHorizontal className='w-4 h-4' />
           </button>
         </div>
       ),
@@ -140,12 +120,13 @@ const UsersPage = () => {
             </div>
             <div className='space-y-1.5'>
               <label className='text-[10px] font-extrabold uppercase tracking-widest text-slate-400 px-1'>
-                Nível de Autorização
+                Setor de Atuação
               </label>
               <select className='w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-3 text-sm font-medium focus:ring-1 focus:ring-primary/20 outline-none'>
-                <option>Super Supervisor</option>
-                <option>Segurança de Zona</option>
-                <option>Administrador de TI</option>
+                <option>Sala de Servidores</option>
+                <option>Laboratório C</option>
+                <option>Ala Admin</option>
+                <option>Doca de Carga</option>
               </select>
             </div>
           </div>
@@ -200,47 +181,18 @@ const UsersPage = () => {
             </div>
             <div className='space-y-1.5'>
               <label className='text-[10px] font-extrabold uppercase tracking-widest text-slate-400 px-1'>
-                Nível de Autorização
+                Setor de Atuação
               </label>
-              <select
-                defaultValue={selectedUser?.role || "Super Supervisor"}
+              <select 
+                defaultValue={selectedUser?.sector}
                 className='w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-3 text-sm font-medium focus:ring-1 focus:ring-primary/20 outline-none'
               >
-                <option>Super Supervisor</option>
-                <option>Segurança de Zona</option>
-                <option>Administrador de TI</option>
-                <option>Operações</option>
+                <option>Sala de Servidores</option>
+                <option>Laboratório C</option>
+                <option>Ala Admin</option>
+                <option>Doca de Carga</option>
               </select>
             </div>
-          </div>
-
-          <div className='space-y-1.5'>
-            <label className='text-[10px] font-extrabold uppercase tracking-widest text-slate-400 px-1'>
-              Endereço de E-mail Corporativo
-            </label>
-            <div className='relative'>
-              <input
-                type='email'
-                defaultValue={selectedUser?.email}
-                className='w-full bg-slate-50 border border-slate-100 rounded-lg pl-10 pr-4 py-3 text-sm font-medium focus:ring-1 focus:ring-primary/20 outline-none'
-                placeholder='nome@seguranca.com'
-              />
-              <Mail className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300' />
-            </div>
-          </div>
-
-          <div className='space-y-1.5'>
-            <label className='text-[10px] font-extrabold uppercase tracking-widest text-slate-400 px-1'>
-              Status de Segurança
-            </label>
-            <select
-              defaultValue={selectedUser?.status || "Ativo"}
-              className='w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-3 text-sm font-medium focus:ring-1 focus:ring-primary/20 outline-none'
-            >
-              <option>Ativo</option>
-              <option>Pendente</option>
-              <option>Revogado</option>
-            </select>
           </div>
 
           <div className='flex justify-between items-center pt-2'>

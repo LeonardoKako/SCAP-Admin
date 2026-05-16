@@ -1,10 +1,24 @@
 import { useState } from 'react';
-import { History, Search, Filter, Download, FileText, Calendar as CalendarIcon, LogIn, LogOut } from 'lucide-react';
+import { History, Search, Download, FileText, Calendar as CalendarIcon, LogIn, LogOut } from 'lucide-react';
 import DataTable from '../../components/DataTable';
 import { MOCK_LOGS, LogEntry } from '../../examples/data';
+import { toast } from 'react-toastify';
 
 const LogsPage = () => {
   const [filterType, setFilterType] = useState<'Todos' | 'Entrada' | 'Saída' | 'Negado'>('Todos');
+  const [selectedDate, setSelectedDate] = useState('2024-10-12');
+
+  const formatDate = (dateStr: string) => {
+    const [year, month, day] = dateStr.split('-');
+    const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+    return `${day} ${months[parseInt(month) - 1]}, ${year}`;
+  };
+
+  const handleFutureFeature = () => {
+    toast.info('Funcionalidade em desenvolvimento. Disponível em breve!', {
+      icon: '🚀'
+    });
+  };
 
   const columns = [
     {
@@ -35,7 +49,6 @@ const LogsPage = () => {
         </div>
       )
     },
-    { header: 'Terminal de Acesso', accessor: 'terminal' },
     { 
       header: 'Evento de Acesso', 
       align: 'right' as const,
@@ -64,11 +77,17 @@ const LogsPage = () => {
           <p className="text-on-surface-variant font-medium mt-1">Histórico completo de todas as atividades de terminal e verificações de permissão.</p>
         </div>
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 bg-white border border-slate-200 text-slate-600 px-5 py-3 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all">
+          <button 
+            onClick={handleFutureFeature}
+            className="flex items-center gap-2 bg-white border border-slate-200 text-slate-600 px-5 py-3 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all"
+          >
             <Download className="w-5 h-5" />
             Exportar Arquivo
           </button>
-          <button className="flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-bold text-sm shadow-xl shadow-primary/20 hover:opacity-90 active:scale-95 transition-all">
+          <button 
+            onClick={handleFutureFeature}
+            className="flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-bold text-sm shadow-xl shadow-primary/20 hover:opacity-90 active:scale-95 transition-all"
+          >
             <FileText className="w-5 h-5" />
             Gerar Relatório
           </button>
@@ -96,17 +115,33 @@ const LogsPage = () => {
             ))}
         </div>
 
-        <button className="flex items-center gap-2 px-4 py-2 text-slate-400 font-bold text-xs uppercase tracking-widest hover:text-slate-900 transition-all">
-            <Filter className="w-4 h-4" />
-            Avançado
-        </button>
-        
+        <div className="flex bg-slate-50 p-1 rounded-lg border border-slate-100">
+            <select className="bg-transparent border-0 focus:ring-0 text-[10px] font-extrabold uppercase tracking-widest text-slate-500 cursor-pointer outline-none px-2">
+                <option>Todos os Setores</option>
+                <option>Sala de Servidores</option>
+                <option>Laboratório C</option>
+                <option>Ala Admin</option>
+            </select>
+        </div>
+
         <div className="h-4 w-px bg-slate-200 mx-2"></div>
 
-        <button className="flex items-center gap-2 px-4 py-2 text-slate-400 font-bold text-xs uppercase tracking-widest hover:text-slate-900 transition-all">
-            <CalendarIcon className="w-4 h-4" />
-            12 Out, 2024
-        </button>
+        <div className="relative flex items-center bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100 hover:border-slate-300 transition-all group overflow-hidden">
+            <input 
+              type="date" 
+              className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10 block"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              onClick={(e) => {
+                // @ts-ignore
+                if (e.target.showPicker) e.target.showPicker();
+              }}
+            />
+            <div className="flex items-center gap-2 text-slate-400 font-bold text-xs uppercase tracking-widest group-hover:text-slate-900 transition-all pointer-events-none">
+                <CalendarIcon className="w-4 h-4" />
+                <span>{formatDate(selectedDate)}</span>
+            </div>
+        </div>
       </div>
 
       <DataTable 

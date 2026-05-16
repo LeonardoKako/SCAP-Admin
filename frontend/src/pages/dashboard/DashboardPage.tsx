@@ -1,11 +1,12 @@
+import { Link } from 'react-router-dom';
 import { Calendar, Users, AlertTriangle, LayoutGrid, TrendingUp, Ban, LogIn, LogOut } from 'lucide-react';
 
 const DashboardPage = () => {
   const kpis = [
-    { label: 'Acessos Hoje', value: '1,284', trend: '+12% vs ontem', icon: Calendar, color: 'bg-primary-container' },
-    { label: 'Presentes no Momento', value: '432', sub: 'Ocupação: 64%', icon: Users, color: 'bg-primary-container' },
-    { label: 'Acessos Negados', value: '7', sub: 'Ação Necessária', icon: AlertTriangle, color: 'bg-error', error: true },
-    { label: 'Setores Ativos', value: '18', sub: '2 alertas de manutenção', icon: LayoutGrid, color: 'bg-primary-container' },
+    { label: 'Acessos Hoje', value: '1,284', icon: Calendar, color: 'bg-primary-container' },
+    { label: 'Presentes no Momento', value: '432', icon: Users, color: 'bg-primary-container' },
+    { label: 'Acessos Negados', value: '7', icon: AlertTriangle, color: 'bg-error', error: true },
+    { label: 'Setores Ativos', value: '18', icon: LayoutGrid, color: 'bg-primary-container' },
   ];
 
   const recentLogs = [
@@ -62,7 +63,7 @@ const DashboardPage = () => {
         <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200/50 overflow-hidden">
           <div className="px-8 py-6 flex justify-between items-center border-b border-slate-100">
             <h3 className="text-lg font-headline font-bold text-on-surface">Log de Acessos em Tempo Real</h3>
-            <button className="text-[10px] font-extrabold text-primary hover:opacity-70 transition-all uppercase tracking-widest px-2 py-1">Ver Arquivo Completo</button>
+            <Link to="/logs" className="text-[10px] font-extrabold text-primary hover:opacity-70 transition-all uppercase tracking-widest px-2 py-1">Ver Arquivo Completo</Link>
           </div>
           <div className="p-6">
             <table className="w-full text-left">
