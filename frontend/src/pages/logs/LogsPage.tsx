@@ -20,6 +20,12 @@ const LogsPage = () => {
     });
   };
 
+  const handleFutureFeature = () => {
+    toast.info('Funcionalidade em desenvolvimento. Disponível em breve!', {
+      icon: '🚀'
+    });
+  };
+
   const columns = [
     {
       header: 'Identidade do Evento',
@@ -115,6 +121,7 @@ const LogsPage = () => {
             ))}
         </div>
 
+<<<<<<< HEAD
         <div className="flex bg-slate-50 p-1 rounded-lg border border-slate-100">
             <select className="bg-transparent border-0 focus:ring-0 text-[10px] font-extrabold uppercase tracking-widest text-slate-500 cursor-pointer outline-none px-2">
                 <option>Todos os Setores</option>
@@ -141,6 +148,17 @@ const LogsPage = () => {
                 <CalendarIcon className="w-4 h-4" />
                 <span>{formatDate(selectedDate)}</span>
             </div>
+=======
+        <div className="h-4 w-px bg-slate-200 mx-2"></div>
+
+        <div className="relative group">
+            <input 
+              type="date" 
+              className="appearance-none bg-transparent border-none text-slate-400 font-bold text-xs uppercase tracking-widest focus:ring-0 cursor-pointer hover:text-slate-900 transition-all outline-none"
+              defaultValue="2024-10-12"
+            />
+            <CalendarIcon className="w-4 h-4 text-slate-400 absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none group-hover:text-slate-900 transition-all" />
+>>>>>>> 900d69e09a80369cd7271ce725352fa24fe9cfb0
         </div>
       </div>
 
