@@ -3,10 +3,10 @@ import { Calendar, Users, AlertTriangle, LayoutGrid, TrendingUp, Ban, LogIn, Log
 
 const DashboardPage = () => {
   const kpis = [
-    { label: 'Acessos Hoje', value: '1,284', icon: Calendar, color: 'bg-primary-container' },
-    { label: 'Presentes no Momento', value: '432', icon: Users, color: 'bg-primary-container' },
-    { label: 'Acessos Negados', value: '7', icon: AlertTriangle, color: 'bg-error', error: true },
-    { label: 'Setores Ativos', value: '18', icon: LayoutGrid, color: 'bg-primary-container' },
+    { label: 'Acessos Hoje', value: '1,284', icon: Calendar, color: 'bg-primary-container', trend: '+12.5%' },
+    { label: 'Presentes no Momento', value: '432', icon: Users, color: 'bg-primary-container', sub: 'Capacidade de 65%' },
+    { label: 'Acessos Negados', value: '7', icon: AlertTriangle, color: 'bg-error', error: true, sub: 'Crítico' },
+    { label: 'Setores Ativos', value: '18', icon: LayoutGrid, color: 'bg-primary-container', trend: 'Estável' },
   ];
 
   const recentLogs = [

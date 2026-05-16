@@ -107,7 +107,7 @@ const UsersPage = () => {
         subtitle='Forneça identidade e detalhes de autorização para acesso ao sistema.'
       >
         <div className='space-y-6'>
-          <div className='grid grid-cols-1 gap-4'>
+          <div className='grid grid-cols-2 gap-4'>
             <div className='space-y-1.5'>
               <label className='text-[10px] font-extrabold uppercase tracking-widest text-slate-400 px-1'>
                 Nome Completo da Identidade
@@ -118,7 +118,6 @@ const UsersPage = () => {
                 placeholder='ex. Julian Vance'
               />
             </div>
-<<<<<<< HEAD
             <div className='space-y-1.5'>
               <label className='text-[10px] font-extrabold uppercase tracking-widest text-slate-400 px-1'>
                 Setor de Atuação
@@ -130,8 +129,6 @@ const UsersPage = () => {
                 <option>Doca de Carga</option>
               </select>
             </div>
-=======
->>>>>>> 900d69e09a80369cd7271ce725352fa24fe9cfb0
           </div>
 
           <div className='space-y-1.5'>
@@ -170,7 +167,7 @@ const UsersPage = () => {
         subtitle='Atualize as informações de identidade e o nível de autorização.'
       >
         <div className='space-y-6'>
-          <div className='grid grid-cols-1 gap-4'>
+          <div className='grid grid-cols-2 gap-4'>
             <div className='space-y-1.5'>
               <label className='text-[10px] font-extrabold uppercase tracking-widest text-slate-400 px-1'>
                 Nome Completo da Identidade
@@ -182,7 +179,6 @@ const UsersPage = () => {
                 placeholder='ex. Julian Vance'
               />
             </div>
-<<<<<<< HEAD
             <div className='space-y-1.5'>
               <label className='text-[10px] font-extrabold uppercase tracking-widest text-slate-400 px-1'>
                 Setor de Atuação
@@ -197,8 +193,6 @@ const UsersPage = () => {
                 <option>Doca de Carga</option>
               </select>
             </div>
-=======
->>>>>>> 900d69e09a80369cd7271ce725352fa24fe9cfb0
           </div>
 
           <div className='flex justify-between items-center pt-2'>

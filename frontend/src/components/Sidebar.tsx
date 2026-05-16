@@ -18,6 +18,7 @@ function cn(...inputs: ClassValue[]) {
 }
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const logout = useAuthStore((state) => state.logout);
   const setSettingsModalOpen = useAuthStore((state) => state.setSettingsModalOpen);
 
