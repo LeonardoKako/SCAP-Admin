@@ -10,7 +10,7 @@ async function getById(sectorId) {
 
     const id = Number(sectorId);
 
-    if(isNaN(sectorId)){
+    if(isNaN(id)){
             throw new appError("Esse ID deve ser um número é válido.", "INVALID_ID", 400);
     }
 

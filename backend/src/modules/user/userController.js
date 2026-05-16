@@ -1,4 +1,3 @@
-import { appError } from "../../errors/appError.js";
 import userService from "./userService.js";
 
 export async function listAll(req, res, next) {
