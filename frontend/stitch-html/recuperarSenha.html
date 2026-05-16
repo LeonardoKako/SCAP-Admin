@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sentinel Admin - Forgot Password</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#000000",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-tertiary": "#ffffff",
+                    "inverse-primary": "#b8c4ff",
+                    "tertiary-container": "#271901",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed": "#dde1ff",
+                    "secondary-container": "#d5e3fc",
+                    "tertiary-fixed": "#fcdeb5",
+                    "secondary": "#515f74",
+                    "secondary-fixed-dim": "#b9c7df",
+                    "on-error-container": "#93000a",
+                    "error-container": "#ffdad6",
+                    "primary-fixed-dim": "#b8c4ff",
+                    "surface-container": "#eceef0",
+                    "on-tertiary-container": "#98805d",
+                    "on-primary-container": "#607cec",
+                    "surface": "#f7f9fb",
+                    "on-primary-fixed": "#001453",
+                    "on-surface": "#191c1e",
+                    "primary-container": "#001453",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#3755c3",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed-variant": "#574425",
+                    "on-primary-fixed-variant": "#173bab",
+                    "on-secondary-fixed": "#0d1c2e",
+                    "on-background": "#191c1e",
+                    "secondary-fixed": "#d5e3fc",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#e0e3e5",
+                    "inverse-surface": "#2d3133",
+                    "on-error": "#ffffff",
+                    "primary": "#000000",
+                    "on-secondary-fixed-variant": "#3a485b",
+                    "on-secondary-container": "#57657a",
+                    "on-surface-variant": "#45464d",
+                    "inverse-on-surface": "#eff1f3",
+                    "background": "#f7f9fb",
+                    "surface-bright": "#f7f9fb",
+                    "outline-variant": "#c6c6cd",
+                    "tertiary-fixed-dim": "#dec29a",
+                    "surface-container-low": "#f2f4f6",
+                    "surface-container-high": "#e6e8ea",
+                    "on-tertiary-fixed": "#271901",
+                    "outline": "#76777d",
+                    "surface-dim": "#d8dadc"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        .architectural-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface min-h-screen flex flex-col">
+<!-- TopNavBar Suppression: Hidden for transactional screen as per protocol -->
+<main class="flex-grow flex items-center justify-center px-6 py-12 relative overflow-hidden">
+<!-- Structural Aesthetic Background Elements -->
+<div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+<div class="absolute -top-[20%] -right-[10%] w-[60%] h-[60%] rounded-full bg-secondary-container/20 blur-[120px]"></div>
+<div class="absolute -bottom-[20%] -left-[10%] w-[60%] h-[60%] rounded-full bg-primary-fixed/20 blur-[120px]"></div>
+</div>
+<div class="w-full max-w-[440px] z-10">
+<!-- Branding Header -->
+<div class="text-center mb-10">
+<div class="inline-flex items-center justify-center p-3 rounded-xl bg-primary-container text-on-primary mb-6">
+<span class="material-symbols-outlined text-3xl" data-icon="shield_person">shield_person</span>
+</div>
+<h1 class="font-headline font-extrabold text-3xl tracking-tighter text-primary mb-2">Sentinel Admin</h1>
+<p class="font-body text-on-surface-variant text-sm tracking-tight">Access Control Recovery</p>
+</div>
+<!-- Recovery Card -->
+<div class="bg-surface-container-lowest architectural-blur rounded-xl p-8 border border-outline-variant/10">
+<div class="mb-8">
+<h2 class="font-headline font-bold text-xl text-on-surface mb-2">Forgot Password?</h2>
+<p class="font-body text-sm text-on-surface-variant leading-relaxed">
+                        Enter the email address associated with your administrator account. We will send a secure link to reset your credentials.
+                    </p>
+</div>
+<form class="space-y-6" onsubmit="return false;">
+<!-- Email Input Group -->
+<div class="space-y-2">
+<label class="font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant ml-1" for="email">Work Email</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-lg" data-icon="mail">mail</span>
+</div>
+<input class="block w-full pl-11 pr-4 py-3.5 bg-surface-container-highest/30 border-b border-outline-variant/20 focus:border-primary focus:ring-0 transition-all duration-200 font-body text-sm placeholder:text-outline" id="email" name="email" placeholder="name@sentinel-systems.com" required="" type="email"/>
+</div>
+</div>
+<!-- Action Button -->
+<button class="w-full group relative overflow-hidden rounded-lg bg-gradient-to-r from-primary to-primary-container text-on-primary font-body font-semibold py-4 px-6 transition-all duration-300 hover:shadow-xl hover:shadow-primary-container/20 active:opacity-80" type="submit">
+<span class="relative z-10 flex items-center justify-center gap-2">
+                            Send Recovery Link
+                            <span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</span>
+</button>
+</form>
+<!-- Navigation Back -->
+<div class="mt-10 pt-6 border-t border-outline-variant/10 text-center">
+<a class="inline-flex items-center gap-2 text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined text-lg group-hover:-translate-x-1 transition-transform" data-icon="keyboard_backspace">keyboard_backspace</span>
+                        Back to Login
+                    </a>
+</div>
+</div>
+<!-- Visual Security Badge -->
+<div class="mt-8 flex items-center justify-center gap-4 text-outline-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+<span class="font-label text-[10px] uppercase tracking-widest">Encrypted Session</span>
+</div>
+<div class="w-1 h-1 rounded-full bg-outline-variant"></div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="font-label text-[10px] uppercase tracking-widest">Identity Verified</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Rendering based on JSON -->
+<footer class="w-full flex flex-col md:flex-row justify-between items-center px-8 py-6 mt-auto bg-slate-50 dark:bg-slate-950">
+<div class="mb-4 md:mb-0">
+<span class="font-inter text-xs tracking-wide uppercase text-slate-400 dark:text-slate-500">© 2024 Sentinel Security Systems. All rights reserved.</span>
+</div>
+<div class="flex gap-6">
+<a class="font-inter text-xs tracking-wide uppercase text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-slate-50 transition-all duration-300" href="#">Privacy Policy</a>
+<a class="font-inter text-xs tracking-wide uppercase text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-slate-50 transition-all duration-300" href="#">Terms of Service</a>
+<a class="font-inter text-xs tracking-wide uppercase text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-slate-50 transition-all duration-300" href="#">Security Audit</a>
+</div>
+</footer>
+</body></html>
