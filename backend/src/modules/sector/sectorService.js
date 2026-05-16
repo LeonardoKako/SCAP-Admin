@@ -7,29 +7,75 @@ async function listAll() {
 }
 
 async function getById(sectorId) {  
+
+    const id = Number(sectorId);
+
+    if(isNaN(sectorId)){
+            throw new appError("Esse ID deve ser um número é válido.", "INVALID_ID", 400);
+    }
+
     const sector = await prisma.sector.findUnique({
         where: { id: sectorId },
     });
 
-    if (sector === null) {
+    if (!sector) {
         throw new appError("ID não corresponde a nenhum setor.", "SECTOR_NOT_FOUND", 404);
     }
 
     return sector;
 }
 
-async function create(sectorName) {
+async function create(sectorBody) {
+    const { name } = sectorBody;
+    if(typeof name !== 'string'){
+            throw new appError("O nome do setor deve ser uma string", "INVALID_TYPE", 400);
+    }
+
+    if(!name || name.trim().length === 0) {
+            throw new appError("Nome está vazio ou contém apenas espaço", "INVALID_NAME", 400);
+        }
+
+    // Verifica se já existe o nome
+    const verifySectorName = await getByName(name);
+
+    if(verifySectorName) {
+        throw new appError(`O setor ${name} já está cadastrado!`, "SECTOR_ALREADY_EXISTS", 409);
+    }
+    
+
     const sector = await prisma.sector.create({
         data: {
-            name: sectorName
+            name: name
         }
     });
-
     return sector;
 }
 
 async function update(sectorBody, sectorId){
     const { name } = sectorBody;
+    const id = Number(sectorId);
+
+    if(isNaN(id)){
+            throw new appError("Esse ID deve ser um número é válido", "INVALID_ID", 400);
+    }
+
+    // Verifica se existe
+    await getById(id);
+
+    if (typeof name !== 'string') {
+            throw new appError("O nome do setor deve ser uma string", "INVALID_TYPE", 400);
+        }
+
+    if(!name || name.trim().length === 0) {
+        throw new appError("Nome está vazio ou contém apenas espaço", "INVALID_NAME", 400);
+    }
+
+    // Verifica se já existe o nome
+    const verifySectorName = await getByName(name);
+
+    if(verifySectorName && verifySectorName.id !== id) {
+        throw new appError(`O setor ${name} já está cadastrado!`, "SECTOR_ALREADY_EXISTS", 409);
+    }
 
     const updatedSector = await prisma.sector.update({
         where : { id: sectorId },
@@ -73,7 +119,6 @@ async function getNumberOfLinkedUsers(sectorId) {
     const count = await prisma.user.count({
          where: { sectorId: sectorId }
     });
-
     return count;
 }
 
@@ -82,6 +127,5 @@ export default {
     getById,
     create,
     update,
-    deleteSector,
-    getByName
+    deleteSector
 };

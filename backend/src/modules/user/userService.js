@@ -7,12 +7,17 @@ async function listAll() {
 }
 
 async function getById(userId) {
+    const id = Number(userId);
+
+    if(isNaN(id)) {
+            throw new appError("ID inválido", "INVALID_ID", 400);
+    }
 
      const user = await prisma.user.findUnique({
         where: { id: userId },
     });
 
-    if(user === null){
+    if(!user){
         throw new appError("ID não corresponde a nenhum usuário", "USER_NOT_FOUND", 404);
     }
         
@@ -21,6 +26,44 @@ async function getById(userId) {
 
 async function create(userBody) {
     const { name, email, profileId, sectorId } = userBody;
+
+    if(typeof name !== 'string' || typeof email !== 'string') {
+            throw new appError("O nome e o email devem ser uma string", "INVALID_FORMAT", 400);
+    }
+
+    const cleanName = name?.trim();
+    const cleanEmail = email?.trim().toLowerCase();
+
+    if(!profileId || !sectorId) {
+            throw new appError("Perfil ou setor não foi preenchido para esse usuário!",
+                                "MISSING_FIELDS", 400);
+    }
+
+    if(typeof profileId !== 'number' || typeof sectorId !== 'number') {
+        throw new appError("Os IDs de perfil e setor devem ser números válidos",
+                        "INVALID_FORMAT", 400);
+    }
+
+    if(!cleanName || cleanName.length === 0) {
+        throw new appError("O nome não pode estar vazio ou ter apenas espaços.",
+                        "INVALID_NAME", 400);
+    }
+
+    if(!cleanEmail || cleanEmail.length === 0) {
+        throw new appError("O email não pode estar vazio ou ter apenas espaços.",
+                            "INVALID_EMAIL", 400);
+    }
+
+    if(!cleanEmail.includes("@")) {
+        throw new appError("O formato do email não é válido", "INVALID_EMAIL_FORMAT", 400);
+    }
+
+    // Verifica se email já existe
+    const verifyExistingEmail = await getByEmail(cleanEmail);
+
+    if(verifyExistingEmail) {
+        throw new appError("Esse email já está cadastrado!", "EMAIL_ALREADY_EXISTS", 409);
+    }
 
     const user = await prisma.user.create({
         data: {
@@ -36,6 +79,53 @@ async function create(userBody) {
 
 async function update(userBody, userId) {
     const { name, email, profileId, sectorId } = userBody;
+    const id = Number(userId);
+
+    if(isNaN(id)) {
+            throw new appError("ID inválido", "INVALID_ID", 400);
+    }
+
+    // Verifica se o usuário existe
+    await getById(id);
+
+    if(typeof name !== 'string' || typeof email !== 'string') {
+            throw new appError("O nome e o email devem ser uma string", "INVALID_FORMAT", 400);
+    }
+
+    const cleanName = name.trim();
+    const cleanEmail = email.trim().toLowerCase();
+
+    if(!profileId || !sectorId) {
+        throw new appError("Perfil ou setor não foi preenchido para esse usuário!",
+                            "MISSING_FIELDS", 400);
+    }
+
+    if(typeof profileId !== 'number' || typeof sectorId !== 'number') {
+        throw new appError("Os IDs de perfil e setor devem ser números válidos",
+                        "INVALID_FORMAT", 400);
+    }
+
+    if(!cleanName || cleanName.length === 0) {
+        throw new appError("O nome não pode estar vazio ou ter apenas espaços.",
+                        "INVALID_NAME", 400);
+    }
+
+    if(!cleanEmail || cleanEmail.length === 0) {
+        throw new appError("O email não pode estar vazio ou ter apenas espaços.",
+                            "INVALID_EMAIL", 400);
+    }
+
+    if(!cleanEmail.includes("@")) {
+        throw new appError("O formato do email não é válido", "INVALID_EMAIL_FORMAT", 400);
+    }
+
+    const verifyExistingEmail = await getByEmail(cleanEmail);
+
+    if(verifyExistingEmail && verifyExistingEmail.id !== id) {
+        throw new appError("Esse email já está cadastrado!", "EMAIL_ALREADY_EXISTS", 409);
+    }
+
+
     const updatedUser = await prisma.user.update({
         where: { id: userId },
         data: {
@@ -80,6 +170,5 @@ export default {
     getById,
     create,
     update,
-    deleteUser,
-    getByEmail
+    deleteUser
 };
