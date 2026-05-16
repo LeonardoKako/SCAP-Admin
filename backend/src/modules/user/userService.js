@@ -11,7 +11,7 @@ async function getById(userId) {
 
     if(isNaN(id)) {
             throw new appError("ID inválido", "INVALID_ID", 400);
-        }
+    }
 
      const user = await prisma.user.findUnique({
         where: { id: userId },
