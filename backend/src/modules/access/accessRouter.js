@@ -119,6 +119,65 @@ router.get("/acessos/:id", getById);
   *               $ref: '#/components/schemas/ErrorResponse'
   */
 router.post("/registrar/acesso", create);
-
+/**
+ * @openapi
+ * /atualizar/acesso/{id}:
+ *   patch:
+ *     summary: Atualiza a data e hora de um acesso
+ *     tags: [Access]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: O ID único do acesso
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - dateTime
+ *             properties:
+ *               dateTime:
+ *                 type: string
+ *                 format: date-time
+ *                 example: "2026-05-16T15:01:16.362Z"
+ *     responses:
+ *       200:
+ *         description: Acesso atualizado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/Access'
+ *       400:
+ *         description: Dados de entrada inválidos (ID ou dateTime inválido)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: Acesso não encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Erro interno no servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
 router.patch("/atualizar/acesso/:id", update);
 export default router;

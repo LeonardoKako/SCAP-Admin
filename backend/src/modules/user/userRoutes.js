@@ -132,9 +132,121 @@ router.get("/usuarios/:id", getById);
   *               $ref: '#/components/schemas/ErrorResponse'
   */
 router.post("/criar/usuario", create);
-
+/**
+ * @openapi
+ * /atualizar/usuario/{id}:
+ *   put:
+ *     summary: Atualiza um usuário existente
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: O ID único do usuário
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - profileId
+ *               - sectorId
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Maria Santos"
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: "maria@email.com"
+ *               profileId:
+ *                 type: integer
+ *                 example: 2
+ *               sectorId:
+ *                 type: integer
+ *                 example: 3
+ *     responses:
+ *       200:
+ *         description: Usuário atualizado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Dados de entrada inválidos (campos vazios ou ID inválido)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: Usuário não encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       409:
+ *         description: Email já está registrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Erro interno no servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
 router.put("/atualizar/usuario/:id", update);
-
+/**
+ * @openapi
+ * /deletar/usuario/{id}:
+ *   delete:
+ *     summary: Deleta um usuário existente
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: O ID único do usuário
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     responses:
+ *       204:
+ *         description: Usuário deletado com sucesso (sem conteúdo)
+ *       400:
+ *         description: ID não é válido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: Usuário não encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Erro interno no servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
 router.delete("/deletar/usuario/:id", deleteUser);
 
 export default router;
