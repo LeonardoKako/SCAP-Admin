@@ -188,5 +188,6 @@ export default {
     getById,
     create,
     update,
-    deleteUser
+    deleteUser,
+    getByEmail
 };
