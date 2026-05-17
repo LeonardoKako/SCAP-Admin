@@ -43,8 +43,7 @@ async function login(loginBody) {
     return {
         user: userLogin,
         token: token
-    }
-;
+    };
 }
 
 export default {

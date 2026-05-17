@@ -20,3 +20,11 @@ export async function login(req, res, next) {
         return next(error);
     }
 }
+
+// Retorna dados do usuário logado
+export async function me(req, res) {
+    return res.status(200).json({
+        success: true,
+        user: req.user
+    });
+}
