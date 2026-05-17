@@ -5,7 +5,19 @@ import path from 'path';
 const swaggerOptions = {
     definition: {
         openapi: '3.0.0',
+        security: [
+            {
+                bearerAuth: []
+            }
+        ],
         components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT'
+                }
+            },
             schemas: {
                 ErrorResponse: {
                     type: 'object',
