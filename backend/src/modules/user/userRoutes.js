@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { create, deleteUser, getById, listAll, update } from "./userController.js";
+import { authMiddleware } from '../../middlewares/authMiddleware.js';
 
 const router = new Router();
 
@@ -25,7 +26,7 @@ const router = new Router();
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get("/usuarios", listAll);
+router.get("/usuarios", authMiddleware, listAll);
 /**
  * @openapi
  * /usuarios/{id}:
@@ -66,7 +67,7 @@ router.get("/usuarios", listAll);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get("/usuarios/:id", getById);
+router.get("/usuarios/:id", authMiddleware, getById);
 /**
   * @openapi
   * /criar/usuario:
@@ -131,7 +132,7 @@ router.get("/usuarios/:id", getById);
   *             schema:
   *               $ref: '#/components/schemas/ErrorResponse'
   */
-router.post("/criar/usuario", create);
+router.post("/criar/usuario", authMiddleware, create);
 /**
  * @openapi
  * /atualizar/usuario/{id}:
@@ -210,7 +211,7 @@ router.post("/criar/usuario", create);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.put("/atualizar/usuario/:id", update);
+router.put("/atualizar/usuario/:id", authMiddleware, update);
 /**
  * @openapi
  * /deletar/usuario/{id}:
@@ -247,6 +248,6 @@ router.put("/atualizar/usuario/:id", update);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.delete("/deletar/usuario/:id", deleteUser);
+router.delete("/deletar/usuario/:id", authMiddleware, deleteUser);
 
 export default router;

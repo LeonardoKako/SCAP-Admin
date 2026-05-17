@@ -1,4 +1,4 @@
-import { appError } from "../errors/appError";
+import { appError } from "../errors/appError.js";
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 import userService from "../modules/user/userService.js";
