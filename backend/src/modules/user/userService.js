@@ -1,5 +1,6 @@
 import prisma from '../../database/prisma.js';
 import { appError } from "../../errors/appError.js";
+import bcrypt from 'bcrypt';
 
 async function listAll() {
         const users = await prisma.user.findMany();
@@ -25,14 +26,19 @@ async function getById(userId) {
 }
 
 async function create(userBody) {
-    const { name, email, profileId, sectorId } = userBody;
+    const { name, email, password, profileId, sectorId } = userBody;
 
     if(typeof name !== 'string' || typeof email !== 'string') {
-            throw new appError("O nome e o email devem ser uma string", "INVALID_FORMAT", 400);
+        throw new appError("O nome e o email devem ser uma string", "INVALID_FORMAT", 400);
     }
 
-    const cleanName = name?.trim();
-    const cleanEmail = email?.trim().toLowerCase();
+    if(typeof password !== 'string') {
+        throw new appError("A senha deve ser uma string", "INVALID_FORMAT", 400);
+    }
+
+    const cleanName = name.trim();
+    const cleanPassword = password.trim();
+    const cleanEmail = email.trim().toLowerCase();
 
     if(!profileId || !sectorId) {
             throw new appError("Perfil ou setor não foi preenchido para esse usuário!",
@@ -58,6 +64,11 @@ async function create(userBody) {
         throw new appError("O formato do email não é válido", "INVALID_EMAIL_FORMAT", 400);
     }
 
+    if(!cleanPassword || cleanPassword.length === 0) {
+        throw new appError("O senha não pode estar vazia ou ter apenas espaços.",
+                            "INVALID_PASSWORD", 400);
+    }
+
     // Verifica se email já existe
     const verifyExistingEmail = await getByEmail(cleanEmail);
 
@@ -65,16 +76,23 @@ async function create(userBody) {
         throw new appError("Esse email já está cadastrado!", "EMAIL_ALREADY_EXISTS", 409);
     }
 
+    const hashPassword = await bcrypt.hash(password, 10);
+
     const user = await prisma.user.create({
         data: {
-            name: name,
-            email: email,
+            name: cleanName,
+            email: cleanEmail,
+            password: hashPassword,
             profileId: profileId,
             sectorId: sectorId
         }
     });
 
-    return user;
+    // retira o hash da senha do retorno
+    // Tira a senha do variável user e cria uma nova variável newUser sem a senha para retorno
+    const { password: _, ...newUser } = user;
+
+    return newUser;
 }
 
 async function update(userBody, userId) {
@@ -170,5 +188,6 @@ export default {
     getById,
     create,
     update,
-    deleteUser
+    deleteUser,
+    getByEmail
 };

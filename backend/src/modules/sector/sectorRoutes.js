@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { create, deleteSector, getById, listAll, update } from './sectorController.js';
+import { authMiddleware } from '../../middlewares/authMiddleware.js';
 
 const router = Router();
 
@@ -25,7 +26,7 @@ const router = Router();
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get("/setores", listAll);
+router.get("/setores", authMiddleware, listAll);
 /**
  * @openapi
  * /setores/{id}:
@@ -66,7 +67,7 @@ router.get("/setores", listAll);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get("/setores/:id", getById);
+router.get("/setores/:id", authMiddleware, getById);
 /**
   * @openapi
   * /criar/setor:
@@ -118,7 +119,7 @@ router.get("/setores/:id", getById);
   *             schema:
   *               $ref: '#/components/schemas/ErrorResponse'
   */
-router.post("/criar/setor", create);
+router.post("/criar/setor", authMiddleware, create);
 /**
  * @openapi
  * /atualizar/setor/{id}:
@@ -184,7 +185,7 @@ router.post("/criar/setor", create);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.put("/atualizar/setor/:id", update);
+router.put("/atualizar/setor/:id", authMiddleware, update);
 /**
  * @openapi
  * /deletar/setor/{id}:
@@ -221,6 +222,6 @@ router.put("/atualizar/setor/:id", update);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.delete("/deletar/setor/:id", deleteSector);
+router.delete("/deletar/setor/:id", authMiddleware, deleteSector);
 export default router;
 

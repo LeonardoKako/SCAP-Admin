@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { create, getById, listAll, update } from './accessController.js';
+import { authMiddleware } from '../../middlewares/authMiddleware.js';
 
 const router = new Router();
 
@@ -25,7 +26,7 @@ const router = new Router();
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get("/acessos", listAll);
+router.get("/acessos", authMiddleware, listAll);
 /**
  * @openapi
  * /acessos/{id}:
@@ -66,7 +67,7 @@ router.get("/acessos", listAll);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get("/acessos/:id", getById);
+router.get("/acessos/:id", authMiddleware, getById);
 /**
   * @openapi
   * /registrar/acesso:
@@ -118,7 +119,7 @@ router.get("/acessos/:id", getById);
   *             schema:
   *               $ref: '#/components/schemas/ErrorResponse'
   */
-router.post("/registrar/acesso", create);
+router.post("/registrar/acesso", authMiddleware, create);
 /**
  * @openapi
  * /atualizar/acesso/{id}:
@@ -179,5 +180,5 @@ router.post("/registrar/acesso", create);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.patch("/atualizar/acesso/:id", update);
+router.patch("/atualizar/acesso/:id", authMiddleware, update);
 export default router;
