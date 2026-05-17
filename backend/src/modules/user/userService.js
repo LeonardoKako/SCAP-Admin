@@ -1,5 +1,6 @@
 import prisma from '../../database/prisma.js';
 import { appError } from "../../errors/appError.js";
+import bcrypt from 'bcrypt';
 
 async function listAll() {
         const users = await prisma.user.findMany();
@@ -25,7 +26,7 @@ async function getById(userId) {
 }
 
 async function create(userBody) {
-    const { name, email, profileId, sectorId } = userBody;
+    const { name, email, password, profileId, sectorId } = userBody;
 
     if(typeof name !== 'string' || typeof email !== 'string') {
             throw new appError("O nome e o email devem ser uma string", "INVALID_FORMAT", 400);
@@ -65,16 +66,23 @@ async function create(userBody) {
         throw new appError("Esse email já está cadastrado!", "EMAIL_ALREADY_EXISTS", 409);
     }
 
+    const hashPassword = await bcrypt.hash(password, 10);
+
     const user = await prisma.user.create({
         data: {
             name: name,
             email: email,
+            password: hashPassword,
             profileId: profileId,
             sectorId: sectorId
         }
     });
 
-    return user;
+    // retira o hash da senha do retorno
+    // Tira a senha do variável user e cria uma nova variável newUser sem a senha para retorno
+    const { password: _, ...newUser } = user;
+
+    return newUser;
 }
 
 async function update(userBody, userId) {

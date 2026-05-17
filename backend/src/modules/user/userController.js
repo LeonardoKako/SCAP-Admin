@@ -26,11 +26,12 @@ export async function getById(req, res, next) {
 
 export async function create(req, res, next) {
     try {
-        const { name, email, profileId, sectorId } = req.body;
+        const { name, email, password, profileId, sectorId } = req.body;
 
         const userBody = { 
             name, 
-            email, 
+            email,
+            password,
             profileId, 
             sectorId 
         };
