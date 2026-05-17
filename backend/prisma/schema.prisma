@@ -37,6 +37,7 @@ model User {
   id Int @id @default(autoincrement())
   name String 
   email String @unique
+  password String
   profileId Int @map("profile_id")
   profile Profile @relation(fields: [profileId], references: [id])
   sectorId Int @map("sector_id")
