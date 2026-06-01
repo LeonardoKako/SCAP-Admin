@@ -177,7 +177,11 @@ async function deleteUser(userId) {
 
 async function getByEmail(userEmail) {   
     const user = await prisma.user.findFirst({
-        where: { email: userEmail }
+        where: { email: userEmail },
+        include: {
+            sector: true,
+            profile: true
+        }
     });
 
     return user;
