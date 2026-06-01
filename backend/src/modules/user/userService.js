@@ -3,7 +3,12 @@ import { appError } from "../../errors/appError.js";
 import bcrypt from 'bcrypt';
 
 async function listAll() {
-        const users = await prisma.user.findMany();
+        const users = await prisma.user.findMany({
+            include: {
+                sector: true,
+                profile: true
+            }
+        });
         return users; 
 }
 

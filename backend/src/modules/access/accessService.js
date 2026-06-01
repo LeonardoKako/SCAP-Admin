@@ -4,7 +4,18 @@ import { AccessType } from '@prisma/client';
 import userService from "../user/userService.js";
 
 async function listAll() {
-        const access = await prisma.access.findMany();
+        const access = await prisma.access.findMany({
+            include: {
+                user: {
+                    include: {
+                        sector: true
+                    }
+                }
+            },
+            orderBy: {
+                dateTime: 'desc'
+            }
+        });
         return access;
 }
 
