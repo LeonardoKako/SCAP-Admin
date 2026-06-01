@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { User as UserIcon, Mail, Lock, Camera, X } from 'lucide-react';
 import SentinelModal from './SentinelModal';
 import { useAuthStore } from '../store/authStore';
+import { api } from '../services/api';
 import { toast } from 'react-toastify';
 
 interface SettingsModalProps {
@@ -10,7 +11,7 @@ interface SettingsModalProps {
 }
 
 const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
-  const { user } = useAuthStore();
+  const { user, updateUser } = useAuthStore();
   const [formData, setFormData] = useState({
     name: user?.name || '',
     email: user?.email || '',
@@ -18,15 +19,34 @@ const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
     confirmPassword: ''
   });
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (!formData.name || !formData.email) {
+      toast.warning('Nome e e-mail são obrigatórios!');
+      return;
+    }
     if (formData.password && formData.password !== formData.confirmPassword) {
       toast.error('As senhas não coincidem!');
       return;
     }
     
-    // Mock update logic
-    toast.success('Configurações atualizadas com sucesso!');
-    onClose();
+    try {
+      await api.put(`/atualizar/usuario/${user?.id}`, {
+        name: formData.name,
+        email: formData.email,
+        profileId: user?.profileId || 1,
+        sectorId: user?.sectorId || 1,
+      });
+
+      updateUser({
+        name: formData.name,
+        email: formData.email
+      });
+
+      toast.success('Configurações atualizadas com sucesso!');
+      onClose();
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Erro ao atualizar configurações.');
+    }
   };
 
   return (

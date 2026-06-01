@@ -11,6 +11,7 @@ interface AuthState {
   login: (email: string, password: string) => Promise<{ success: boolean; message?: string }>;
   logout: () => void;
   setSettingsModalOpen: (open: boolean) => void;
+  updateUser: (user: Partial<User>) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -48,6 +49,8 @@ export const useAuthStore = create<AuthState>()(
             sector: sectorName,
             role: roleName,
             avatar: user.avatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+            profileId: user.profileId,
+            sectorId: user.sectorId,
           };
 
           set({ 
@@ -67,6 +70,11 @@ export const useAuthStore = create<AuthState>()(
       },
       setSettingsModalOpen: (open) => {
         set({ isSettingsModalOpen: open });
+      },
+      updateUser: (updatedUser) => {
+        set((state) => ({
+          user: state.user ? { ...state.user, ...updatedUser } : null
+        }));
       },
     }),
     {

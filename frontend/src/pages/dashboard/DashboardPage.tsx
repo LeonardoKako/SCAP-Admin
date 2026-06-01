@@ -1,22 +1,91 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Users, AlertTriangle, LayoutGrid, TrendingUp, Ban, LogIn, LogOut } from 'lucide-react';
+import { Calendar, Users, AlertTriangle, LayoutGrid, TrendingUp, LogIn, LogOut } from 'lucide-react';
+import { api } from '../../services/api';
+
+const DEFAULT_AVATAR = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80";
 
 const DashboardPage = () => {
+  const [stats, setStats] = useState({
+    todayAccess: 0,
+    presentNow: 0,
+    deniedAccess: 0,
+    activeSectors: 0
+  });
+  const [recentLogs, setRecentLogs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchDashboardData = async () => {
+    setLoading(true);
+    try {
+      const [accessRes, sectorsRes, usersRes] = await Promise.all([
+        api.get('/acessos'),
+        api.get('/setores'),
+        api.get('/usuarios')
+      ]);
+
+      const rawAccesses = accessRes.data;
+      const sectorsCount = sectorsRes.data.length;
+      const usersCount = usersRes.data.length;
+
+      // 1. Acessos hoje
+      const todayStr = new Date().toISOString().split('T')[0];
+      const todayAccesses = rawAccesses.filter((a: any) => 
+        a.dateTime.startsWith(todayStr)
+      );
+
+      // 2. Presentes no momento (usuários com última transação sendo ENTRY)
+      const userLastAccessType: Record<number, string> = {};
+      // Como a lista vem ordenada por data decrescente, o primeiro que encontramos é o mais recente
+      rawAccesses.forEach((a: any) => {
+        if (a.userId && !(a.userId in userLastAccessType)) {
+          userLastAccessType[a.userId] = a.type;
+        }
+      });
+      const activePresent = Object.values(userLastAccessType).filter(type => type === 'ENTRY').length;
+
+      setStats({
+        todayAccess: todayAccesses.length,
+        presentNow: activePresent,
+        deniedAccess: 0, // Sem logs de negação salvos no banco por enquanto
+        activeSectors: sectorsCount
+      });
+
+      // 3. Pegar os últimos 5 logs formatados
+      const formattedRecent = rawAccesses.slice(0, 5).map((l: any) => {
+        const timeFormatted = new Date(l.dateTime).toLocaleTimeString('pt-BR', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        });
+        return {
+          id: `#${l.id}`,
+          user: l.user?.name || 'Desconhecido',
+          idNumber: l.user ? `USR-${l.user.id}` : 'N/A',
+          sector: l.user?.sector?.name || 'Lobby',
+          time: timeFormatted,
+          type: l.type === 'ENTRY' ? 'Entrada' : 'Saída',
+          image: l.user?.avatar || DEFAULT_AVATAR
+        };
+      });
+      setRecentLogs(formattedRecent);
+
+    } catch (error) {
+      console.error("Erro ao carregar dados do Dashboard", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
   const kpis = [
-    { label: 'Acessos Hoje', value: '1,284', icon: Calendar, color: 'bg-primary-container', trend: '+12.5%' },
-    { label: 'Presentes no Momento', value: '432', icon: Users, color: 'bg-primary-container', sub: 'Capacidade de 65%' },
-    { label: 'Acessos Negados', value: '7', icon: AlertTriangle, color: 'bg-error', error: true, sub: 'Crítico' },
-    { label: 'Setores Ativos', value: '18', icon: LayoutGrid, color: 'bg-primary-container', trend: 'Estável' },
-  ];
-
-  const recentLogs = [
-    { id: '#4920-A', user: 'Julian D. Vance', sector: 'Laboratório C', time: '14:32:05', type: 'Entrada', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop' },
-    { id: '#3112-B', user: 'Maria Lopez', sector: 'Servidores 01', time: '14:30:12', type: 'Saída', image: 'https://images.unsplash.com/photo-1494790108377-be9bc29b2933?w=100&h=100&fit=crop' },
-    { id: '#8841-F', user: 'Erik Karlsson', sector: 'Perímetro Sul', time: '14:28:44', type: 'Entrada', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop' },
-  ];
-
-  const alerts = [
-    { title: 'Dispositivo Desconhecido', detail: 'Tentativa de Bypass', sector: 'Ala Admin', time: '14:25:31', status: 'Negado' },
+    { label: 'Acessos Hoje', value: String(stats.todayAccess), icon: Calendar, color: 'bg-primary-container', trend: 'Em tempo real' },
+    { label: 'Presentes no Momento', value: String(stats.presentNow), icon: Users, color: 'bg-primary-container', sub: `Atividade ativa` },
+    { label: 'Acessos Negados', value: String(stats.deniedAccess), icon: AlertTriangle, color: 'bg-error', error: stats.deniedAccess > 0, sub: 'Monitorado' },
+    { label: 'Setores Ativos', value: String(stats.activeSectors), icon: LayoutGrid, color: 'bg-primary-container', trend: 'Estável' },
   ];
 
   return (
@@ -83,7 +152,7 @@ const DashboardPage = () => {
                         <img src={log.image} alt={log.user} className="w-10 h-10 rounded-full object-cover ring-2 ring-slate-100/50" />
                         <div>
                           <div className="font-bold text-on-surface">{log.user}</div>
-                          <div className="text-[11px] text-slate-400 font-bold uppercase tracking-tight">ID: {log.id}</div>
+                          <div className="text-[11px] text-slate-400 font-bold uppercase tracking-tight">ID: {log.idNumber}</div>
                         </div>
                       </div>
                     </td>
@@ -99,28 +168,13 @@ const DashboardPage = () => {
                     </td>
                   </tr>
                 ))}
-                {alerts.map((alert, idx) => (
-                  <tr key={idx} className="group bg-red-50/30 hover:bg-red-50/50 transition-colors border-b border-red-100/30">
-                    <td className="px-4 py-5 border-l-4 border-l-error">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center text-error shadow-sm">
-                          <Ban className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <div className="font-bold text-error">{alert.title}</div>
-                          <div className="text-[10px] text-error/80 font-extrabold uppercase tracking-tight">{alert.detail}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-5 text-error font-extrabold">{alert.sector}</td>
-                    <td className="px-4 py-5 text-error/60 font-medium">{alert.time}</td>
-                    <td className="px-4 py-5 text-right">
-                      <span className="inline-block px-4 py-1.5 rounded-lg bg-error text-white text-[10px] font-bold uppercase tracking-widest shadow-sm">
-                        {alert.status}
-                      </span>
+                {recentLogs.length === 0 && (
+                  <tr>
+                    <td colSpan={4} className="px-4 py-8 text-center text-slate-400 font-medium">
+                      Nenhum acesso registrado até o momento.
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -164,8 +218,8 @@ const DashboardPage = () => {
               </div>
 
               <div className="absolute top-[65%] left-[50%] group-hover:scale-110 transition-transform">
-                <span className="absolute inset-0 w-4 h-4 rounded-full bg-red-500/40 animate-ping"></span>
-                <div className="relative w-3 h-3 bg-red-500 rounded-full border-2 border-white shadow-lg"></div>
+                <span className="absolute inset-0 w-4 h-4 rounded-full bg-green-500/40 animate-ping"></span>
+                <div className="relative w-3 h-3 bg-green-500 rounded-full border-2 border-white shadow-lg"></div>
               </div>
 
               <div className="absolute top-[68%] right-[28%] group-hover:scale-110 transition-transform">
@@ -173,7 +227,7 @@ const DashboardPage = () => {
               </div>
               
               <div className="absolute bottom-2 left-2 flex items-center gap-2 bg-slate-900/80 backdrop-blur-sm px-2.5 py-1.5 rounded text-[9px] text-white font-bold uppercase tracking-widest shadow-xl">
-                <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-green-500"></span>
                 Sistemas Estáveis
               </div>
             </div>

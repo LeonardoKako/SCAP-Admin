@@ -14,6 +14,8 @@ export interface User {
   sector: Sector;
   role: string;
   avatar?: string;
+  profileId?: number;
+  sectorId?: number;
 }
 
 export const MOCK_USERS: (User & { password?: string })[] = [

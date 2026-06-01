@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   History,
   Search,
@@ -9,30 +9,30 @@ import {
   LogOut,
 } from "lucide-react";
 import DataTable from "../../components/DataTable";
-import { MOCK_LOGS, LogEntry } from "../../examples/data";
+import { LogEntry } from "../../examples/data";
+import { api } from "../../services/api";
 import { toast } from "react-toastify";
 
 const LogsPage = () => {
-  const [filterType, setFilterType] = useState<
-    "Todos" | "Entrada" | "Saída" | "Negado"
-  >("Todos");
-  const [selectedDate, setSelectedDate] = useState("2024-10-12");
+  const [logs, setLogs] = useState<LogEntry[]>([]);
+  const [sectors, setSectors] = useState<{ id: number; name: string }[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterType, setFilterType] = useState<"Todos" | "Entrada" | "Saída" | "Negado">("Todos");
+  const [selectedSector, setSelectedSector] = useState("Todos os Setores");
+  
+  // Initialize with today's date
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  });
 
   const formatDate = (dateStr: string) => {
+    if (!dateStr) return "";
     const [year, month, day] = dateStr.split("-");
     const months = [
-      "Jan",
-      "Fev",
-      "Mar",
-      "Abr",
-      "Mai",
-      "Jun",
-      "Jul",
-      "Ago",
-      "Set",
-      "Out",
-      "Nov",
-      "Dez",
+      "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+      "Jul", "Ago", "Set", "Out", "Nov", "Dez",
     ];
     return `${day} ${months[parseInt(month) - 1]}, ${year}`;
   };
@@ -40,6 +40,51 @@ const LogsPage = () => {
   const handleFutureFeature = () => {
     toast.info("Funcionalidade em desenvolvimento. Disponível em breve!");
   };
+
+  const fetchLogsAndSectors = async () => {
+    setLoading(true);
+    try {
+      const [logsRes, sectorsRes] = await Promise.all([
+        api.get("/acessos"),
+        api.get("/setores")
+      ]);
+      setSectors(sectorsRes.data);
+
+      const formattedLogs: LogEntry[] = logsRes.data.map((l: any) => {
+        const eventDate = new Date(l.dateTime);
+        const dateFormatted = eventDate.toLocaleDateString('pt-BR', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        }).replace('.', ''); // Ex: "21 abr 2024"
+
+        const timeFormatted = eventDate.toLocaleTimeString('pt-BR', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        });
+
+        return {
+          id: String(l.id),
+          user: l.user?.name || "Desconhecido",
+          idNumber: l.user ? `USR-${l.user.id}` : "N/A",
+          sector: l.user?.sector?.name || "Lobby",
+          time: timeFormatted,
+          date: dateFormatted,
+          type: l.type === "ENTRY" ? "Entrada" : "Saída"
+        };
+      });
+      setLogs(formattedLogs);
+    } catch (error: any) {
+      toast.error("Erro ao carregar os logs de acessos.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLogsAndSectors();
+  }, []);
 
   const columns = [
     {
@@ -99,17 +144,37 @@ const LogsPage = () => {
         >
           {log.type === "Entrada" && <LogIn className='w-3 h-3 mr-1.5' />}
           {log.type === "Saída" && <LogOut className='w-3 h-3 mr-1.5' />}
-          {log.type === "Negado" && <Search className='w-3 h-3 mr-1.5' />}
           {log.type}
         </span>
       ),
     },
   ];
 
-  const filteredLogs =
-    filterType === "Todos"
-      ? MOCK_LOGS
-      : MOCK_LOGS.filter((log) => log.type === filterType);
+  // Aplicar filtros no client-side
+  const filteredLogs = logs.filter((log) => {
+    // 1. Filtro por tipo de acesso
+    if (filterType !== "Todos" && log.type !== filterType) {
+      return false;
+    }
+
+    // 2. Filtro por Setor
+    if (selectedSector !== "Todos os Setores" && log.sector !== selectedSector) {
+      return false;
+    }
+
+    // 3. Filtro por Barra de busca (nome, id ou setor)
+    if (searchTerm) {
+      const query = searchTerm.toLowerCase();
+      const matchUser = log.user.toLowerCase().includes(query);
+      const matchId = log.idNumber.toLowerCase().includes(query);
+      const matchSector = log.sector.toLowerCase().includes(query);
+      if (!matchUser && !matchId && !matchSector) {
+        return false;
+      }
+    }
+
+    return true;
+  });
 
   return (
     <div className='space-y-8 animate-in fade-in duration-700'>
@@ -120,7 +185,7 @@ const LogsPage = () => {
           </h2>
           <p className='text-on-surface-variant font-medium mt-1'>
             Histórico completo de todas as atividades de terminal e verificações
-            de permissão.
+            de permissão no banco de dados.
           </p>
         </div>
         <div className='flex gap-3'>
@@ -148,15 +213,17 @@ const LogsPage = () => {
           <input
             type='text'
             placeholder='Buscar por nome, ID ou setor...'
-            className='bg-transparent border-0 focus:ring-0 text-sm font-medium w-full text-slate-900 placeholder:text-slate-400'
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className='bg-transparent border-0 focus:ring-0 text-sm font-medium w-full text-slate-900 placeholder:text-slate-400 outline-none'
           />
         </div>
 
         <div className='flex bg-slate-50 p-1 rounded-lg border border-slate-100'>
-          {["Todos", "Entrada", "Saída", "Negado"].map((type) => (
+          {(["Todos", "Entrada", "Saída"] as const).map((type) => (
             <button
               key={type}
-              onClick={() => setFilterType(type as any)}
+              onClick={() => setFilterType(type)}
               className={`px-4 py-1.5 rounded-md text-[10px] font-extrabold uppercase tracking-widest transition-all ${
                 filterType === type
                   ? "bg-white text-primary shadow-sm"
@@ -169,11 +236,15 @@ const LogsPage = () => {
         </div>
 
         <div className='flex bg-slate-50 p-1 rounded-lg border border-slate-100'>
-          <select className='bg-transparent border-0 focus:ring-0 text-[10px] font-extrabold uppercase tracking-widest text-slate-500 cursor-pointer outline-none px-2'>
-            <option>Todos os Setores</option>
-            <option>Sala de Servidores</option>
-            <option>Laboratório C</option>
-            <option>Ala Admin</option>
+          <select 
+            value={selectedSector}
+            onChange={(e) => setSelectedSector(e.target.value)}
+            className='bg-transparent border-0 focus:ring-0 text-[10px] font-extrabold uppercase tracking-widest text-slate-500 cursor-pointer outline-none px-2'
+          >
+            <option value="Todos os Setores">Todos os Setores</option>
+            {sectors.map((s) => (
+              <option key={s.id} value={s.name}>{s.name}</option>
+            ))}
           </select>
         </div>
 
