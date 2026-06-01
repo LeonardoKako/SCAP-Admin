@@ -1,0 +1,64 @@
+### Configurações Globais
+@baseUrl = http://localhost:3000
+# ATENÇÃO: Faça primeiro o Login (Passo 1), copie o token gerado e cole-o aqui:
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzgwMzE4NzAwLCJleHAiOjE3ODA0MDUxMDB9.DbMvrQWLqCvWwzVvplxqjVuh37kCCdzxsRwoOTkdD7I
+
+### 1. Fazer Login (Como Admin Seedado)
+# Use este endpoint para obter o JWT token. Ele já funciona com o admin criado pelo seed.
+# Copie o valor do "token" retornado na resposta e cole-o na variável @token acima.
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "joao@scap.com",
+  "password": "12345"
+}
+
+### 2. Obter Perfil do Usuário Logado (/me)
+GET {{baseUrl}}/me
+Authorization: Bearer {{token}}
+
+### 3. Criar um Novo Setor (Ex: Recursos Humanos)
+POST {{baseUrl}}/criar/setor
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Recursos Humanos"
+}
+
+### 4. Listar Todos os Setores
+GET {{baseUrl}}/setores
+Authorization: Bearer {{token}}
+
+### 5. Criar um Novo Usuário (Ex: no novo Setor)
+# Nota: profileId: 2 corresponde a "Técnico de Segurança" criado no seed
+# sectorId: 5 corresponde ao ID gerado para "Recursos Humanos" (se for o quinto cadastrado)
+POST {{baseUrl}}/criar/usuario
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "João Silva",
+  "email": "joao@scap.com",
+  "password": "12345",
+  "profileId": 2,
+  "sectorId": 5
+}
+
+### 6. Listar Todos os Usuários
+GET {{baseUrl}}/usuarios
+Authorization: Bearer {{token}}
+
+### 7. Registrar Acesso (Entrada/Saída)
+POST {{baseUrl}}/registrar/acesso
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "userId": 1
+}
+
+### 8. Listar Logs de Acessos
+GET {{baseUrl}}/acessos
+Authorization: Bearer {{token}}
