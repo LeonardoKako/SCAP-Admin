@@ -7,6 +7,7 @@ import DashboardPage from '../pages/dashboard/DashboardPage';
 import LogsPage from '../pages/logs/LogsPage';
 import UsersPage from '../pages/users/UsersPage';
 import SectorsPage from '../pages/sectors/SectorsPage';
+import SimulatorPage from '../pages/simulator/SimulatorPage';
  
 const AppRouter = () => {
   return (
@@ -15,8 +16,9 @@ const AppRouter = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/recovery" element={<RecoveryPage />} />
 
-      {/* Private Routes (Wrapped in MainLayout) */}
+      {/* Private Routes */}
       <Route element={<ProtectedRoute />}>
+        <Route path="/simulador" element={<SimulatorPage />} />
         <Route element={<MainLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/logs" element={<LogsPage />} />

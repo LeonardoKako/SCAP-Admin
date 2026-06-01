@@ -7,6 +7,7 @@ import {
   Settings,
   Shield,
   LogOut,
+  Cpu,
 } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -27,6 +28,7 @@ const Sidebar = () => {
     { icon: ClipboardList, label: "Registros", path: "/logs" },
     { icon: Users, label: "Usuários", path: "/users" },
     { icon: MapPin, label: "Setores", path: "/sectors" },
+    { icon: Cpu, label: "Simulador", path: "/simulador" },
   ];
 
 
