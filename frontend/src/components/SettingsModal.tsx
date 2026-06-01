@@ -35,6 +35,7 @@ const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
         email: formData.email,
         profileId: user?.profileId || 1,
         sectorId: user?.sectorId || 1,
+        ...(formData.password ? { password: formData.password } : {})
       });
 
       updateUser({

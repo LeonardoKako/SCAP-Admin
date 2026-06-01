@@ -101,7 +101,7 @@ async function create(userBody) {
 }
 
 async function update(userBody, userId) {
-    const { name, email, profileId, sectorId } = userBody;
+    const { name, email, password, profileId, sectorId } = userBody;
     const id = Number(userId);
 
     if(isNaN(id)) {
@@ -148,15 +148,23 @@ async function update(userBody, userId) {
         throw new appError("Esse email já está cadastrado!", "EMAIL_ALREADY_EXISTS", 409);
     }
 
+    const updateData = {
+        name: name,
+        email: email,
+        profileId: profileId,
+        sectorId: sectorId
+    };
+
+    if (password) {
+        if (typeof password !== 'string' || password.trim().length === 0) {
+            throw new appError("A nova senha deve ser uma string válida", "INVALID_FORMAT", 400);
+        }
+        updateData.password = await bcrypt.hash(password.trim(), 10);
+    }
 
     const updatedUser = await prisma.user.update({
-        where: { id: userId },
-        data: {
-            name: name,
-            email: email,
-            profileId: profileId,
-            sectorId: sectorId
-        }
+        where: { id: id },
+        data: updateData
     });
 
     return updatedUser;

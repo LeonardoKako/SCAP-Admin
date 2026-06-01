@@ -54,11 +54,12 @@ export async function update(req, res, next) {
     try {
         const userId = Number(req.params.id);
 
-        const { name, email, profileId, sectorId } = req.body;
+        const { name, email, password, profileId, sectorId } = req.body;
 
         const userBody = {
             name,
             email,
+            password,
             profileId,
             sectorId
         };
