@@ -1,0 +1,17 @@
+FROM node:20-slim
+
+WORKDIR /app
+
+COPY package*.json ./
+COPY prisma ./prisma/
+
+RUN npm install
+
+# Gerar o cliente do Prisma
+RUN npx prisma generate
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm", "run", "start"]
