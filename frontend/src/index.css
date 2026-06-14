@@ -5,7 +5,7 @@
   --color-primary-container: #001453;
   --color-primary-fixed: #dde1ff;
   --color-primary-fixed-dim: #b8c4ff;
-  
+
   --color-secondary: #515f74;
   --color-secondary-container: #d5e3fc;
   --color-secondary-fixed: #d5e3fc;
@@ -46,7 +46,8 @@
 }
 
 :root {
-  --primary: #001453;
+  /* --primary: #001453; */
+  --primary: #ff00ea;
 }
 
 body {
