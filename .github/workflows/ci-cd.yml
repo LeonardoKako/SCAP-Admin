@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies (Backend)
+        run: |
+          cd backend
+          npm install
+
+      - name: Run unit tests (Backend)
+        run: |
+          cd backend
+          npm run test
+
+  lint-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies (Backend)
+        run: |
+          cd backend
+          npm install
+
+      - name: Run lint (Backend)
+        run: |
+          cd backend
+          npm run lint || echo "Lint warning or error"

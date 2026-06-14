@@ -1,0 +1,44 @@
+name: CD - Deploy to EC2
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/SCAP-Admin
+            git checkout develop
+            git pull origin develop
+            docker compose down
+            docker compose up -d --build
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies (Frontend)
+        run: |
+          cd frontend
+          npm install
+
+      - name: Run Selenium Interface Test
+        env:
+          APP_URL: http://${{ secrets.EC2_HOST }}
+        run: |
+          cd frontend
+          npm run test:selenium
