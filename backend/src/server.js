@@ -18,4 +18,5 @@ app.use(accessRouter);
 app.use(authRouter);
 app.use(errorMiddleware);
 
-app.listen(port);
+// eslint-disable-next-line no-console
+app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
