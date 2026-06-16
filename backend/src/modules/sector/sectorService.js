@@ -127,5 +127,6 @@ export default {
     getById,
     create,
     update,
-    deleteSector
+    deleteSector,
+    getByName
 };

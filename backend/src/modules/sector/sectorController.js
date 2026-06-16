@@ -87,5 +87,6 @@ export default {
     listAll,
     getById,
     create,
-    update
+    update,
+    deleteSector
 };

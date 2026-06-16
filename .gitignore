@@ -1,6 +1,7 @@
 # Backend
 
 backend/node_modules/
+backend/coverage/
 
 backend/.env
 node_modules

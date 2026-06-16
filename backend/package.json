@@ -6,8 +6,15 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
+<<<<<<< Updated upstream
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
+=======
+    "test": "node --experimental-vm-modules node_modules/jest-cli/bin/jest.js",
+    "test:unit": "node --experimental-vm-modules node_modules/jest-cli/bin/jest.js tests/unit",
+    "test:integration": "node --experimental-vm-modules node_modules/jest-cli/bin/jest.js tests/integration",
+    "test:coverage": "node --experimental-vm-modules node_modules/jest-cli/bin/jest.js --coverage",
+>>>>>>> Stashed changes
     "lint": "eslint \"src/**/*.js\""
   },
   "keywords": [],
@@ -24,11 +31,23 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@jest/globals": "^30.4.1",
     "dotenv": "^17.4.2",
     "eslint": "^10.3.0",
     "globals": "^17.6.0",
+<<<<<<< Updated upstream
     "prisma": "^6.7.0",
     "vitest": "^4.1.8"
+=======
+    "jest": "^30.4.2",
+    "prisma": "^6.7.0"
+>>>>>>> Stashed changes
+  },
+  "jest": {
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
+    "transform": {}
   },
   "prisma": {
     "seed": "node prisma/seed.js"

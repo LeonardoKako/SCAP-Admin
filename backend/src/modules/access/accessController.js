@@ -69,5 +69,6 @@ export async function update(req, res, next) {
 export default {
     listAll,
     getById,
-    create
+    create,
+    update
 };
