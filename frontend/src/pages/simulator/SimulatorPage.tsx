@@ -46,7 +46,7 @@ const SimulatorPage = () => {
     setTimeout(async () => {
       try {
         const response = await api.post("/registrar/acesso", {
-          userId: Number(selectedUserId),
+          userId: selectedUserId,
         });
 
         const accessData = response.data.data;

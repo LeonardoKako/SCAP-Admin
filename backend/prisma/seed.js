@@ -4,79 +4,76 @@ import bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Seeding database...');
+  console.log('Seeding database (MongoDB)...');
 
   // Criar setores padrão
-  await prisma.sector.upsert({
+  const sectorAdmin = await prisma.sector.upsert({
     where: { name: 'Admin' },
     update: {},
-    create: { id: 1, name: 'Admin' },
+    create: { name: 'Admin' },
   });
 
   await prisma.sector.upsert({
     where: { name: 'TI' },
     update: {},
-    create: { id: 2, name: 'TI' },
+    create: { name: 'TI' },
   });
 
   await prisma.sector.upsert({
     where: { name: 'Financeiro' },
     update: {},
-    create: { id: 3, name: 'Financeiro' },
+    create: { name: 'Financeiro' },
   });
 
   await prisma.sector.upsert({
     where: { name: 'Comercial' },
     update: {},
-    create: { id: 4, name: 'Comercial' },
+    create: { name: 'Comercial' },
   });
 
   // Criar perfis padrão
-  await prisma.profile.upsert({
-    where: { id: 1 },
-    update: {},
-    create: { id: 1, name: 'Supervisor do Sistema' },
+  // Como profile não tem name @unique no schema, buscamos pelo nome ou criamos
+  let profileSupervisor = await prisma.profile.findFirst({
+    where: { name: 'Supervisor do Sistema' },
   });
+  if (!profileSupervisor) {
+    profileSupervisor = await prisma.profile.create({
+      data: { name: 'Supervisor do Sistema' },
+    });
+  }
 
-  await prisma.profile.upsert({
-    where: { id: 2 },
-    update: {},
-    create: { id: 2, name: 'Técnico de Segurança' },
-  });
+  const profilesToEnsure = [
+    'Técnico de Segurança',
+    'Gestor de Contas',
+    'Consultor Comercial',
+  ];
 
-  await prisma.profile.upsert({
-    where: { id: 3 },
-    update: {},
-    create: { id: 3, name: 'Gestor de Contas' },
-  });
-
-  await prisma.profile.upsert({
-    where: { id: 4 },
-    update: {},
-    create: { id: 4, name: 'Consultor Comercial' },
-  });
+  for (const profName of profilesToEnsure) {
+    const existing = await prisma.profile.findFirst({ where: { name: profName } });
+    if (!existing) {
+      await prisma.profile.create({ data: { name: profName } });
+    }
+  }
 
   // Criar usuário administrador padrão para acesso inicial
   const hashPassword = await bcrypt.hash('12345', 10);
   await prisma.user.upsert({
     where: { email: 'admin@scap.com' },
-    update: {},
+    update: {
+      password: hashPassword,
+      sectorId: sectorAdmin.id,
+      profileId: profileSupervisor.id,
+    },
     create: {
-      id: 1,
       name: 'Administrador',
       email: 'admin@scap.com',
       password: hashPassword,
-      profileId: 1,
-      sectorId: 1
-    }
+      profileId: profileSupervisor.id,
+      sectorId: sectorAdmin.id,
+    },
   });
 
-  // Ajustar sequenciadores do PostgreSQL devido aos IDs manuais
-  await prisma.$executeRawUnsafe(`SELECT setval(pg_get_serial_sequence('"tb_sector"', 'id'), coalesce(max(id), 1)) FROM "tb_sector"`);
-  await prisma.$executeRawUnsafe(`SELECT setval(pg_get_serial_sequence('"tb_profile"', 'id'), coalesce(max(id), 1)) FROM "tb_profile"`);
-  await prisma.$executeRawUnsafe(`SELECT setval(pg_get_serial_sequence('"tb_user"', 'id'), coalesce(max(id), 1)) FROM "tb_user"`);
-
-  console.log('Database seeded successfully!');
+  console.log('Database seeded successfully on MongoDB!');
 }
 
 main()

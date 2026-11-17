@@ -12,7 +12,7 @@ export async function listAll(req, res, next) {
 
 export async function getById(req, res, next) {
     try {
-        const sectorId = Number(req.params.id);
+        const sectorId = req.params.id;
 
         const sector = await sectorService.getById(sectorId);
 
@@ -49,13 +49,12 @@ export async function create(req, res, next) {
 
 export async function update(req, res, next) {
     try {
-        const sectorId = Number(req.params.id);
-
+        const sectorId = req.params.id;
         const { name } = req.body;
 
         const sectorBody = {
             name: name
-        }
+        };
 
         const updatedSector = await sectorService.update(sectorBody, sectorId);
 
@@ -66,22 +65,22 @@ export async function update(req, res, next) {
             message: message,
             data: updatedSector
         });
-
-    } catch(error) {
+    } catch (error) {
         return next(error);
     }
 }
 
 export async function deleteSector(req, res, next) {
     try {
-        const sectorId = Number(req.params.id);
+        const sectorId = req.params.id;
+
         await sectorService.deleteSector(sectorId);
+
         return res.status(204).end();
     } catch (error) {
         return next(error);
     }
 }
-
 
 export default {
     listAll,

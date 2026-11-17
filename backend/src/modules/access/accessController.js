@@ -3,17 +3,15 @@ import accessService from "./accessService.js";
 export async function listAll(req, res, next) {  
     try {
         const access = await accessService.listAll();
-        res.status(200).json(access);
-    }
-    catch(error) {
+        return res.status(200).json(access);
+    } catch(error) {
         return next(error);
     }
-
 }
 
 export async function getById(req, res, next) {
-     try {
-        const accessId = Number(req.params.id);
+    try {
+        const accessId = req.params.id;
 
         const access = await accessService.getById(accessId);
 
@@ -46,8 +44,7 @@ export async function create(req, res, next) {
 
 export async function update(req, res, next) {
     try {
-        const accessId = Number(req.params.id);
-
+        const accessId = req.params.id;
         const { dateTime } = req.body;     
 
         const accessBody = {

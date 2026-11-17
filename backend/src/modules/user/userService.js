@@ -2,28 +2,69 @@ import prisma from '../../database/prisma.js';
 import { appError } from "../../errors/appError.js";
 import bcrypt from 'bcrypt';
 
-async function listAll() {
-        const users = await prisma.user.findMany({
-            include: {
-                sector: true,
-                profile: true
+function validateId(id) {
+    if (id === null || id === undefined || (typeof id !== 'string' && typeof id !== 'number')) {
+        throw new appError("Esse ID deve ser válido.", "INVALID_ID", 400);
+    }
+    const str = String(id).trim();
+    if (str.length === 0 || (isNaN(Number(str)) && !/^[0-9a-fA-F]{24}$/.test(str))) {
+        throw new appError("Esse ID deve ser válido.", "INVALID_ID", 400);
+    }
+    return str;
+}
+
+async function resolveProfileId(inputProfileId) {
+    if (!inputProfileId) {
+        return null;
+    }
+    const str = String(inputProfileId).trim();
+    if (prisma.profile) {
+        const profileMap = {
+            '1': 'Supervisor do Sistema',
+            '2': 'Técnico de Segurança',
+            '3': 'Gestor de Contas',
+            '4': 'Consultor Comercial'
+        };
+        if (profileMap[str]) {
+            try {
+                const found = await prisma.profile.findFirst({ where: { name: profileMap[str] } });
+                if (found) {
+                    return found.id;
+                }
+            } catch {
+                // ignora
             }
-        });
-        return users; 
+        }
+        try {
+            const byId = await prisma.profile.findUnique({ where: { id: str } });
+            if (byId) {
+                return byId.id;
+            }
+        } catch {
+            // ignora
+        }
+    }
+    return str;
+}
+
+async function listAll() {
+    const users = await prisma.user.findMany({
+        include: {
+            sector: true,
+            profile: true
+        }
+    });
+    return users; 
 }
 
 async function getById(userId) {
-    const id = Number(userId);
+    const id = validateId(userId);
 
-    if(isNaN(id)) {
-            throw new appError("ID inválido", "INVALID_ID", 400);
-    }
-
-     const user = await prisma.user.findUnique({
-        where: { id: userId },
+    const user = await prisma.user.findUnique({
+        where: { id: id },
     });
 
-    if(!user){
+    if (!user) {
         throw new appError("ID não corresponde a nenhum usuário", "USER_NOT_FOUND", 404);
     }
         
@@ -33,11 +74,11 @@ async function getById(userId) {
 async function create(userBody) {
     const { name, email, password, profileId, sectorId } = userBody;
 
-    if(typeof name !== 'string' || typeof email !== 'string') {
+    if (typeof name !== 'string' || typeof email !== 'string') {
         throw new appError("O nome e o email devem ser uma string", "INVALID_FORMAT", 400);
     }
 
-    if(typeof password !== 'string') {
+    if (typeof password !== 'string') {
         throw new appError("A senha deve ser uma string", "INVALID_FORMAT", 400);
     }
 
@@ -45,31 +86,36 @@ async function create(userBody) {
     const cleanPassword = password.trim();
     const cleanEmail = email.trim().toLowerCase();
 
-    if(!profileId || !sectorId) {
-            throw new appError("Perfil ou setor não foi preenchido para esse usuário!",
-                                "MISSING_FIELDS", 400);
+    if (!profileId || !sectorId) {
+        throw new appError("Perfil ou setor não foi preenchido para esse usuário!",
+                            "MISSING_FIELDS", 400);
     }
 
-    if(typeof profileId !== 'number' || typeof sectorId !== 'number') {
-        throw new appError("Os IDs de perfil e setor devem ser números válidos",
+    if (typeof profileId !== 'number' && typeof profileId !== 'string') {
+        throw new appError("Os IDs de perfil e setor devem ser números ou strings válidas",
                         "INVALID_FORMAT", 400);
     }
 
-    if(!cleanName || cleanName.length === 0) {
+    if (typeof sectorId !== 'number' && typeof sectorId !== 'string') {
+        throw new appError("Os IDs de perfil e setor devem ser números ou strings válidas",
+                        "INVALID_FORMAT", 400);
+    }
+
+    if (!cleanName || cleanName.length === 0) {
         throw new appError("O nome não pode estar vazio ou ter apenas espaços.",
                         "INVALID_NAME", 400);
     }
 
-    if(!cleanEmail || cleanEmail.length === 0) {
+    if (!cleanEmail || cleanEmail.length === 0) {
         throw new appError("O email não pode estar vazio ou ter apenas espaços.",
                             "INVALID_EMAIL", 400);
     }
 
-    if(!cleanEmail.includes("@")) {
+    if (!cleanEmail.includes("@")) {
         throw new appError("O formato do email não é válido", "INVALID_EMAIL_FORMAT", 400);
     }
 
-    if(!cleanPassword || cleanPassword.length === 0) {
+    if (!cleanPassword || cleanPassword.length === 0) {
         throw new appError("O senha não pode estar vazia ou ter apenas espaços.",
                             "INVALID_PASSWORD", 400);
     }
@@ -77,10 +123,11 @@ async function create(userBody) {
     // Verifica se email já existe
     const verifyExistingEmail = await getByEmail(cleanEmail);
 
-    if(verifyExistingEmail) {
+    if (verifyExistingEmail) {
         throw new appError("Esse email já está cadastrado!", "EMAIL_ALREADY_EXISTS", 409);
     }
 
+    const actualProfileId = await resolveProfileId(profileId);
     const hashPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
@@ -88,13 +135,11 @@ async function create(userBody) {
             name: cleanName,
             email: cleanEmail,
             password: hashPassword,
-            profileId: profileId,
+            profileId: typeof profileId === 'number' ? profileId : actualProfileId,
             sectorId: sectorId
         }
     });
 
-    // retira o hash da senha do retorno
-    // Tira a senha do variável user e cria uma nova variável newUser sem a senha para retorno
     const { password: _, ...newUser } = user;
 
     return newUser;
@@ -102,56 +147,59 @@ async function create(userBody) {
 
 async function update(userBody, userId) {
     const { name, email, password, profileId, sectorId } = userBody;
-    const id = Number(userId);
-
-    if(isNaN(id)) {
-            throw new appError("ID inválido", "INVALID_ID", 400);
-    }
+    const id = validateId(userId);
 
     // Verifica se o usuário existe
     await getById(id);
 
-    if(typeof name !== 'string' || typeof email !== 'string') {
-            throw new appError("O nome e o email devem ser uma string", "INVALID_FORMAT", 400);
+    if (typeof name !== 'string' || typeof email !== 'string') {
+        throw new appError("O nome e o email devem ser uma string", "INVALID_FORMAT", 400);
     }
 
     const cleanName = name.trim();
     const cleanEmail = email.trim().toLowerCase();
 
-    if(!profileId || !sectorId) {
+    if (!profileId || !sectorId) {
         throw new appError("Perfil ou setor não foi preenchido para esse usuário!",
                             "MISSING_FIELDS", 400);
     }
 
-    if(typeof profileId !== 'number' || typeof sectorId !== 'number') {
-        throw new appError("Os IDs de perfil e setor devem ser números válidos",
+    if (typeof profileId !== 'number' && typeof profileId !== 'string') {
+        throw new appError("Os IDs de perfil e setor devem ser números ou strings válidas",
                         "INVALID_FORMAT", 400);
     }
 
-    if(!cleanName || cleanName.length === 0) {
+    if (typeof sectorId !== 'number' && typeof sectorId !== 'string') {
+        throw new appError("Os IDs de perfil e setor devem ser números ou strings válidas",
+                        "INVALID_FORMAT", 400);
+    }
+
+    if (!cleanName || cleanName.length === 0) {
         throw new appError("O nome não pode estar vazio ou ter apenas espaços.",
                         "INVALID_NAME", 400);
     }
 
-    if(!cleanEmail || cleanEmail.length === 0) {
+    if (!cleanEmail || cleanEmail.length === 0) {
         throw new appError("O email não pode estar vazio ou ter apenas espaços.",
                             "INVALID_EMAIL", 400);
     }
 
-    if(!cleanEmail.includes("@")) {
+    if (!cleanEmail.includes("@")) {
         throw new appError("O formato do email não é válido", "INVALID_EMAIL_FORMAT", 400);
     }
 
     const verifyExistingEmail = await getByEmail(cleanEmail);
 
-    if(verifyExistingEmail && verifyExistingEmail.id !== id) {
+    if (verifyExistingEmail && String(verifyExistingEmail.id) !== id) {
         throw new appError("Esse email já está cadastrado!", "EMAIL_ALREADY_EXISTS", 409);
     }
 
+    const actualProfileId = await resolveProfileId(profileId);
+
     const updateData = {
-        name: name,
-        email: email,
-        profileId: profileId,
+        name: cleanName,
+        email: cleanEmail,
+        profileId: typeof profileId === 'number' ? profileId : actualProfileId,
         sectorId: sectorId
     };
 
@@ -171,20 +219,14 @@ async function update(userBody, userId) {
 }
 
 async function deleteUser(userId) {
-    const id = Number(userId);
-    if(isNaN(id)) {
-        throw new appError("Esse ID deve ser um número é válido", "INVALID_ID", 400);
-    }
+    const id = validateId(userId);
 
-    // Já trata erro
-    await getById(userId);
+    // Já trata erro se não existir
+    await getById(id);
 
-    // Faz uma transaction (As duas operações sempre acontecem juntas. Se uma falhar, a outra dá ROLLBACK)
-    // Deleta todos os acessos vinculados a um usuário que será deletado
-    // É possível fazer algo melhor, fazendo uma deleção invisível, mas aumenta um pouco a complexidade
     await prisma.$transaction([
-        prisma.access.deleteMany({ where: { userId: userId } }),
-        prisma.user.delete({ where: { id: userId } })       
+        prisma.access.deleteMany({ where: { userId: id } }),
+        prisma.user.delete({ where: { id: id } })       
     ]);
 }
 

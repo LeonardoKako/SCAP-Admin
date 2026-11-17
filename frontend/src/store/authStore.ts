@@ -61,7 +61,7 @@ export const useAuthStore = create<AuthState>()(
 
           return { success: true };
         } catch (error: any) {
-          const errMsg = error.response?.data?.message || 'Falha ao conectar com o servidor ou credenciais inválidas.';
+          const errMsg = error.response?.data?.error?.message || error.response?.data?.message || 'Falha ao conectar com o servidor ou credenciais inválidas.';
           return { success: false, message: errMsg };
         }
       },

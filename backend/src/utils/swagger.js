@@ -1,6 +1,12 @@
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const modulesPath = path.resolve(__dirname, '../modules/**/*.js').replace(/\\/g, '/');
 
 const swaggerOptions = {
     definition: {
@@ -22,12 +28,12 @@ const swaggerOptions = {
                 ErrorResponse: {
                     type: 'object',
                     properties: {
-                        success: {type: 'boolean', example: false, default: false},
+                        success: { type: 'boolean', example: false, default: false },
                         error: {
                             type: 'object',
                             properties: {
-                                code: {type: 'string', example: 'RESOURCE_NOT_FOUND'},
-                                message: {type: 'string', example: 'Recurso não encontrado'},
+                                code: { type: 'string', example: 'RESOURCE_NOT_FOUND' },
+                                message: { type: 'string', example: 'Recurso não encontrado' },
                             }
                         }    
                     }
@@ -35,11 +41,11 @@ const swaggerOptions = {
                 Access: {
                     type: 'object',
                     properties: {
-                        id: {type: 'integer', example: 1},
+                        id: { type: 'string', example: '664d9f1092a11b0e3c456789' },
                         userId: {
-                            type: 'integer', 
+                            type: 'string', 
                             description: 'ID do usuário que realizou o acesso', 
-                            example: 1
+                            example: '664d9f1092a11b0e3c456789'
                         },
                         accessType: {
                             type: 'string', 
@@ -47,24 +53,24 @@ const swaggerOptions = {
                             description: 'Define se o acesso é uma entrada ou saída',
                             example: 'ENTRY'
                         },
-                        dateTime: {type: 'string', format: 'date-time', example: '2026-04-28T23:50:00Z'}
+                        dateTime: { type: 'string', format: 'date-time', example: '2026-04-28T23:50:00Z' }
                     }
                 },
                 User: {
                     type: 'object',
                     properties: {
-                        id: {type: 'integer', example: 1},
-                        name: {type: 'string', example: 'João Silva'},
-                        email: {type: 'string', example: 'joao@gmail.com'},
+                        id: { type: 'string', example: '664d9f1092a11b0e3c456789' },
+                        name: { type: 'string', example: 'João Silva' },
+                        email: { type: 'string', example: 'joao@gmail.com' },
                         profileId: {
-                            type: 'integer',
+                            type: 'string',
                             description: 'ID do perfil atribuído a esse usuário',
-                            example: 1
+                            example: '664d9f1092a11b0e3c456780'
                         },
                         sectorId: {
-                            type: 'integer',
+                            type: 'string',
                             description: 'ID do setor atribuído a esse usuário',
-                            example: 1
+                            example: '664d9f1092a11b0e3c456781'
                         },
                         createdAt: { 
                             type: 'string', 
@@ -85,19 +91,19 @@ const swaggerOptions = {
                 Sector: {
                     type: 'object',
                     properties: {
-                        id: {type: 'integer', example: 1},
-                        name: {type: 'string', example: 'Administrativo'},
+                        id: { type: 'string', example: '664d9f1092a11b0e3c456781' },
+                        name: { type: 'string', example: 'Administrativo' },
                         createdAt: { 
                             type: 'string', 
                             format: 'date-time', 
-                            description: 'Data de criação do usuário',
+                            description: 'Data de criação do setor',
                             example: '2024-05-20T10:00:00Z',
                             readOnly: true
                         },
                         updatedAt: { 
                             type: 'string', 
                             format: 'date-time', 
-                            description: 'Data da última atualização do usuário',
+                            description: 'Data da última atualização do setor',
                             example: '2024-05-21T15:30:00Z',
                             readOnly: true
                         }
@@ -106,9 +112,9 @@ const swaggerOptions = {
             }
         },
         info: {
-            title: 'Api SCAP-ADMIN',
+            title: 'API SCAP-ADMIN',
             version: '1.0.0',
-            description: 'Documentação dos endpoints da api do sistema SCAP-ADMIN',
+            description: 'Documentação dos endpoints da API do sistema SCAP-ADMIN (NoSQL / MongoDB)',
         },
         servers: [
             {
@@ -117,7 +123,11 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: [path.resolve(process.cwd(), 'backend/src/modules/**/*.js')],
+    apis: [
+        modulesPath,
+        './src/modules/**/*.js',
+        './backend/src/modules/**/*.js'
+    ],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
@@ -129,4 +139,4 @@ export const setupSwagger = (app) => {
         res.setHeader('Content-Type', 'application/json');
         res.send(swaggerDocs);
     });
-}
+};

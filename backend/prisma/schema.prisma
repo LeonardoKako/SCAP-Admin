@@ -1,22 +1,16 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model Profile {
-  id Int @id @default(autoincrement())
-  name String
-  users User[]
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  users     User[]
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -24,9 +18,9 @@ model Profile {
 }
 
 model Sector {
-  id Int @id @default(autoincrement())
-  name String @unique
-  users User[]
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  users     User[]
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -34,14 +28,14 @@ model Sector {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  name String 
-  email String @unique
-  password String
-  profileId Int @map("profile_id")
-  profile Profile @relation(fields: [profileId], references: [id])
-  sectorId Int @map("sector_id")
-  sector Sector @relation(fields: [sectorId], references: [id])
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String   @unique
+  password  String
+  profileId String   @map("profile_id") @db.ObjectId
+  profile   Profile  @relation(fields: [profileId], references: [id])
+  sectorId  String   @map("sector_id") @db.ObjectId
+  sector    Sector   @relation(fields: [sectorId], references: [id])
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -56,11 +50,11 @@ enum AccessType {
 }
 
 model Access {
-  id Int @id @default(autoincrement())
-  userId Int @map("user_id")
-  user User @relation(fields: [userId], references: [id])
-  type AccessType @map("access_type")
-  dateTime DateTime @default(now())
+  id       String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String     @map("user_id") @db.ObjectId
+  user     User       @relation(fields: [userId], references: [id])
+  type     AccessType @map("access_type")
+  dateTime DateTime   @default(now())
 
   @@map("tb_access")
 }

@@ -54,6 +54,9 @@ const UsersPage = () => {
 
       const loadedSectors = sectorsRes.data;
       setSectors(loadedSectors);
+      if (loadedSectors.length > 0) {
+        setNewSectorId((prev) => prev || String(loadedSectors[0].id));
+      }
 
       const loadedUsers = usersRes.data.map((u: any) => {
         const sectorName = u.sector?.name || "";
@@ -91,8 +94,8 @@ const UsersPage = () => {
         name: newName,
         email: newEmail,
         password: newPassword,
-        profileId: Number(newProfileId),
-        sectorId: Number(newSectorId),
+        profileId: String(newProfileId),
+        sectorId: String(newSectorId),
       });
       toast.success("Usuário registrado com sucesso!");
       setIsModalOpen(false);
@@ -118,8 +121,8 @@ const UsersPage = () => {
       await api.put(`/atualizar/usuario/${selectedUser.id}`, {
         name: editName,
         email: editEmail,
-        profileId: Number(editProfileId),
-        sectorId: Number(editSectorId),
+        profileId: String(editProfileId),
+        sectorId: String(editSectorId),
       });
       toast.success("Usuário atualizado com sucesso!");
       setIsEditModalOpen(false);

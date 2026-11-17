@@ -3,6 +3,17 @@ import { appError } from '../../errors/appError.js';
 import { AccessType } from '@prisma/client';
 import userService from "../user/userService.js";
 
+function validateId(id) {
+    if (id === null || id === undefined || (typeof id !== 'string' && typeof id !== 'number')) {
+        throw new appError("O id deve ser válido", "INVALID_ID", 400);
+    }
+    const str = String(id).trim();
+    if (str.length === 0 || (isNaN(Number(str)) && !/^[0-9a-fA-F]{24}$/.test(str))) {
+        throw new appError("O id deve ser válido", "INVALID_ID", 400);
+    }
+    return str;
+}
+
 async function listAll() {
     const access = await prisma.access.findMany({
         include: {
@@ -20,15 +31,11 @@ async function listAll() {
 }
 
 async function getById(accessId) {
-    const id = Number(accessId);
-
-    if (isNaN(id)) {
-        throw new appError("O id deve ser um número válido", "INVALID_ID", 400);
-    }
+    const id = validateId(accessId);
 
     const access = await prisma.access.findUnique({
         where: { id: id }
-    })
+    });
 
     if (!access) {
         throw new appError("ID não corresponde a nenhum acesso", "ACCESS_NOT_FOUND", 404);
@@ -38,18 +45,19 @@ async function getById(accessId) {
 }
 
 async function create(accessBody) {
-
     const { userId } = accessBody;
 
-    if (!userId) {
-        throw new appError("O campo userId é obrigatório", "MISSING_FIELDS", 400);
+    if (!userId || (typeof userId !== 'string' && typeof userId !== 'number')) {
+        throw new appError("O campo userId é obrigatório e deve ser válido", "MISSING_FIELDS", 400);
     }
 
-    // usa método do userService para validar
-    await userService.getById(userId);
+    const cleanUserId = validateId(userId);
+
+    // usa método do userService para validar se o usuário existe
+    await userService.getById(cleanUserId);
 
     const lastType = await prisma.access.findFirst({
-        where: { userId: userId },
+        where: { userId: cleanUserId },
         orderBy: { dateTime: 'desc' }
     });
 
@@ -67,7 +75,7 @@ async function create(accessBody) {
 
     const access = await prisma.access.create({
         data: {
-            userId: userId,
+            userId: typeof userId === 'number' ? userId : cleanUserId,
             type: currentType
         }
     });
@@ -77,12 +85,7 @@ async function create(accessBody) {
 
 async function update(accessBody, accessId) {
     const { dateTime } = accessBody;
-
-    const id = Number(accessId);
-
-    if (isNaN(id)) {
-        throw new appError("O id do acesso deve ser um número válido", "INVALID_ID", 400);
-    }
+    const id = validateId(accessId);
 
     if (typeof dateTime !== 'string') {
         throw new appError("O campo de dateTime deve ser um texto (string) no formato ISO",
@@ -134,7 +137,6 @@ async function update(accessBody, accessId) {
 }
 
 async function getPreviousAccess(userId, dateTime) {
-    // buscar por AccessId para pegar o registro
     const previousAccess = await prisma.access.findFirst({
         where: {
             userId: userId,
@@ -145,7 +147,7 @@ async function getPreviousAccess(userId, dateTime) {
         orderBy: {
             dateTime: 'desc'
         },
-        take: 1 // equivalente ao LIMIT no sql
+        take: 1
     });
 
     return previousAccess;
